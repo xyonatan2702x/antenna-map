@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- SEO -->
+  <title>קליטה גרועה? עברו לחברה שמכסה אתכם | מפת כיסוי אנטנות</title>
+  <meta name="description" content="מפת אנטנות סלולריות בישראל — בדוק מי מכסה את האזור שלך. נתונים רשמיים ממשרד הגנת הסביבה. שירות ייעוץ חינמי למעבר חברת סלולר." />
+  <meta name="keywords" content="אנטנות סלולריות, כיסוי פרטנר, כיסוי פלאפון, כיסוי סלקום, מפת אנטנות ישראל" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://[הדומיין-שלך].co.il/" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="קליטה גרועה? עברו לחברה שמכסה אתכם" />
+  <meta property="og:description" content="בדוק אילו אנטנות פעילות קרוב אליך ואיזו חברה מכסה הכי טוב את האזור שלך." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://[הדומיין-שלך].co.il/" />
+  <meta property="og:locale" content="he_IL" />
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "מפת כיסוי אנטנות | האנטנה קרובה",
+    "description": "עוזרים ללקוחות פרטיים לעבור חברת סלולר בגלל קליטה גרועה",
+    "url": "https://[הדומיין-שלך].co.il",
+    "areaServed": {
+      "@type": "Country",
+      "name": "Israel"
+    },
+    "serviceType": "מעבר בין חברות סלולר",
+    "availableLanguage": "Hebrew",
+    "potentialAction": {
+      "@type": "LeaveAction",
+      "name": "השאר פרטים",
+      "target": "https://[הדומיין-שלך].co.il/#lead-form"
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "מה עושים כשיש קליטה גרועה בבית?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "הצעד הראשון הוא לבדוק אם חברת הסלולר שלכם מכסה את האזור שלכם. אם לא — מעבר לחברה אחרת הוא הפתרון המהיר ביותר."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "איזו חברת סלולר הכי טובה לקליטה?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "זה תלוי באזור המגורים. אנחנו בודקים עבורכם מי מכסה את האזור שלכם ומציעים התאמה אישית."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.9.0/proj4.js"></script>
+  <script src="antennas-data.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+
+    body{
+      font-family:'Heebo',Arial,sans-serif;
+      background:#f7f9fc;color:#222;
+      min-height:100vh;display:flex;flex-direction:column;
+    }
+
+    /* ── LOADING ── */
+    #loading-screen{
+      position:fixed;inset:0;background:#fff;z-index:9999;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
+    }
+    #loading-screen .load-icon{font-size:3rem}
+    #loading-screen h2{font-size:1.3rem;font-weight:700;color:#1a1a2e}
+    #loading-screen p{font-size:0.88rem;color:#999}
+    .progress-wrap{width:260px;height:6px;background:#e8edf3;border-radius:10px;overflow:hidden}
+    #progress-bar{height:100%;background:linear-gradient(90deg,#00B4CC,#7FDFED);border-radius:10px;width:0%;transition:width 0.3s}
+    #loading-label{font-size:0.8rem;color:#bbb}
+
+    /* ── HEADER ── */
+    header{
+      background:#fff;border-bottom:1px solid #e8edf3;
+      padding:0 20px;height:60px;
+      display:flex;align-items:center;justify-content:space-between;
+      box-shadow:0 1px 8px rgba(0,0,0,0.06);
+      position:sticky;top:0;z-index:100;gap:12px;
+    }
+    .logo{display:flex;align-items:center;gap:8px;font-size:1.05rem;font-weight:700;color:#00B4CC;white-space:nowrap}
+    .header-right{display:flex;align-items:center;gap:10px}
+
+
+    /* ── HERO ── */
+    .hero{background:#fff;padding:24px 20px 18px;text-align:center;border-bottom:1px solid #e8edf3}
+    .hero h1{font-size:1.5rem;font-weight:700;color:#1a1a2e;margin-bottom:4px}
+    .hero p{font-size:0.9rem;color:#888;margin-bottom:20px}
+
+    .search-wrapper{position:relative;max-width:500px;margin:0 auto}
+    .search-box{
+      display:flex;background:#fff;border:2px solid #e0e7ef;
+      border-radius:50px;overflow:hidden;
+      box-shadow:0 4px 16px rgba(0,180,204,0.08);
+      transition:border-color 0.2s,box-shadow 0.2s;
+    }
+    .search-box:focus-within{border-color:#00B4CC;box-shadow:0 4px 20px rgba(0,180,204,0.16)}
+    .search-box input{
+      flex:1;padding:12px 18px;border:none;outline:none;
+      font-family:'Heebo',Arial,sans-serif;font-size:0.95rem;color:#222;background:transparent;
+    }
+    .search-box input::placeholder{color:#bbb}
+    .search-box button{
+      padding:0 20px;background:#00B4CC;color:#fff;border:none;
+      font-family:'Heebo',Arial,sans-serif;font-size:0.9rem;font-weight:600;
+      cursor:pointer;transition:background 0.2s;white-space:nowrap;
+    }
+    .search-box button:hover{background:#009ab0}
+
+    .location-btn{
+      display:inline-flex;align-items:center;gap:5px;margin-top:12px;
+      background:none;border:none;color:#00B4CC;
+      font-family:'Heebo',Arial,sans-serif;font-size:0.88rem;font-weight:500;
+      cursor:pointer;padding:5px 12px;border-radius:20px;transition:background 0.2s;
+    }
+    .location-btn:hover{background:#e0f7fa}
+
+    /* ── FILTER BAR ── */
+    .filter-bar{
+      background:#fff;border-bottom:1px solid #e8edf3;
+      padding:10px 20px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+    }
+    .filter-label{font-size:0.8rem;color:#aaa;font-weight:600;margin-left:4px}
+    .filter-btn{
+      display:flex;align-items:center;gap:5px;
+      padding:5px 14px;border-radius:20px;border:2px solid;
+      font-family:'Heebo',Arial,sans-serif;font-size:0.82rem;font-weight:600;
+      cursor:pointer;transition:all 0.2s;background:#fff;
+    }
+    .filter-btn.active{color:#fff}
+    .filter-btn.inactive{background:#fff!important;opacity:0.5}
+    .filter-dot{width:8px;height:8px;border-radius:50%;background:currentColor}
+
+    /* ── AUTOCOMPLETE ── */
+    #suggestions{
+      display:none;position:absolute;top:calc(100% + 6px);right:0;left:0;
+      background:#fff;border:1px solid #e0e7ef;border-radius:14px;
+      box-shadow:0 8px 30px rgba(0,0,0,0.1);overflow:hidden;z-index:9000;
+    }
+    .suggestion-item{
+      display:flex;align-items:center;gap:10px;padding:10px 16px;
+      cursor:pointer;font-size:0.88rem;color:#333;
+      border-bottom:1px solid #f0f4f8;transition:background 0.15s;
+    }
+    .suggestion-item:last-child{border-bottom:none}
+    .suggestion-item:hover{background:#f5f9ff}
+    .suggestion-main{font-weight:600;color:#222}
+    .suggestion-sub{font-size:0.76rem;color:#999;margin-top:1px}
+
+    /* ── MAP ── */
+    .map-wrapper{flex:1;display:flex;flex-direction:column;position:relative}
+    #map{flex:1;min-height:400px}
+
+    /* ── STATUS BAR ── */
+    .status-bar{
+      background:#fff;border-top:1px solid #e8edf3;
+      padding:8px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;min-height:38px;
+    }
+    #status-text{font-size:0.84rem;color:#777;flex:1}
+    #counts{display:none;gap:7px;flex-wrap:wrap}
+    .count-pill{padding:2px 10px;border-radius:20px;font-size:0.78rem;font-weight:600}
+
+    /* ── SEO SECTION ── */
+    .seo-section{
+      background:#fff;border-top:1px solid #e8edf3;
+      padding:24px 28px;
+    }
+    .seo-section h2{font-size:1rem;font-weight:700;color:#1a1a2e;margin-bottom:8px}
+    .seo-section p{font-size:0.85rem;color:#888;line-height:1.7;max-width:700px}
+    .seo-section .seo-grid{display:flex;gap:24px;margin-top:16px;flex-wrap:wrap}
+    .seo-card{flex:1;min-width:160px;background:#f7f9fc;border-radius:10px;padding:14px 16px}
+    .seo-card h3{font-size:0.82rem;font-weight:700;color:#555;margin-bottom:4px}
+    .seo-card p{font-size:0.78rem;color:#999;line-height:1.5}
+
+    /* ── POPUP ── */
+    .leaflet-popup-content-wrapper{
+      border-radius:12px!important;
+      box-shadow:0 6px 24px rgba(0,0,0,0.1)!important;
+      padding:0!important;overflow:hidden;
+    }
+    .leaflet-popup-content{margin:0!important;width:auto!important}
+    .leaflet-popup-tip-container{display:none}
+    .antenna-logo-icon{filter:drop-shadow(0 2px 4px rgba(0,0,0,0.4));border-radius:50%}
+    .popup-inner{padding:14px 16px;min-width:195px}
+    .popup-badge{
+      display:inline-block;padding:3px 10px;border-radius:20px;
+      font-size:0.8rem;font-weight:700;color:#fff;margin-bottom:8px;
+    }
+    .popup-inner p{font-size:0.8rem;color:#666;margin-bottom:3px;line-height:1.5}
+    .popup-cta{
+      margin-top:10px;width:100%;padding:9px;border:none;border-radius:8px;
+      font-family:'Heebo',Arial,sans-serif;font-size:0.86rem;font-weight:600;
+      color:#fff;cursor:pointer;transition:opacity 0.2s;
+    }
+    .popup-cta:hover{opacity:0.88}
+
+    /* ── MODAL ── */
+    .modal-overlay{
+      display:none;position:fixed;inset:0;
+      background:rgba(0,0,0,0.3);z-index:9999;
+      align-items:center;justify-content:center;padding:16px;
+    }
+    .modal-overlay.open{display:flex}
+    .modal{
+      background:#fff;border-radius:20px;padding:32px 28px;
+      width:100%;max-width:390px;
+      box-shadow:0 20px 60px rgba(0,0,0,0.12);animation:popIn 0.22s ease;
+    }
+    @keyframes popIn{from{transform:scale(0.93);opacity:0}to{transform:scale(1);opacity:1}}
+    .modal-icon{
+      width:52px;height:52px;background:#e0f7fa;border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+      font-size:1.5rem;margin:0 auto 16px;
+    }
+    .modal h2{font-size:1.25rem;font-weight:700;text-align:center;margin-bottom:6px;color:#1a1a2e}
+    .modal .subtitle{text-align:center;font-size:0.88rem;color:#999;margin-bottom:22px;line-height:1.5}
+    .modal .subtitle strong{color:#00B4CC}
+    .field{margin-bottom:12px}
+    .field label{display:block;font-size:0.82rem;font-weight:600;color:#555;margin-bottom:5px}
+    .field input{
+      width:100%;padding:11px 14px;border:1.5px solid #e0e7ef;border-radius:10px;
+      font-family:'Heebo',Arial,sans-serif;font-size:0.95rem;color:#222;outline:none;
+      transition:border-color 0.2s;
+    }
+    .field input:focus{border-color:#00B4CC}
+    .btn-submit{
+      width:100%;padding:13px;margin-top:6px;background:#00B4CC;color:#fff;border:none;
+      border-radius:10px;font-family:'Heebo',Arial,sans-serif;font-size:0.98rem;font-weight:700;
+      cursor:pointer;transition:background 0.2s,transform 0.1s;
+    }
+    .btn-submit:hover{background:#009ab0;transform:translateY(-1px)}
+    .btn-cancel{
+      width:100%;padding:8px;margin-top:4px;background:none;border:none;
+      color:#bbb;font-family:'Heebo',Arial,sans-serif;font-size:0.86rem;cursor:pointer;
+    }
+    .btn-cancel:hover{color:#777}
+
+    /* ── LEADS PANEL ── */
+    .panel-overlay{
+      display:none;position:fixed;inset:0;
+      background:rgba(0,0,0,0.3);z-index:9999;
+      align-items:flex-start;justify-content:flex-end;
+    }
+    .panel-overlay.open{display:flex}
+    .leads-panel{
+      background:#fff;width:100%;max-width:500px;height:100vh;
+      box-shadow:-8px 0 40px rgba(0,0,0,0.12);
+      display:flex;flex-direction:column;animation:slideIn 0.25s ease;
+    }
+    @keyframes slideIn{from{transform:translateX(100%)}to{transform:translateX(0)}}
+    .panel-header{
+      padding:18px 22px;border-bottom:1px solid #e8edf3;
+      display:flex;align-items:center;justify-content:space-between;
+    }
+    .panel-header h2{font-size:1.05rem;font-weight:700;color:#1a1a2e}
+    .panel-header-actions{display:flex;align-items:center;gap:10px}
+    .btn-export{
+      display:flex;align-items:center;gap:5px;
+      padding:6px 12px;background:#25D366;color:#fff;border:none;border-radius:8px;
+      font-family:'Heebo',Arial,sans-serif;font-size:0.78rem;font-weight:600;cursor:pointer;
+    }
+    .btn-clear-all{
+      font-size:0.78rem;color:#e53935;background:none;border:none;
+      cursor:pointer;font-family:'Heebo',Arial,sans-serif;padding:4px 8px;border-radius:6px;
+    }
+    .btn-clear-all:hover{background:#fdecea}
+    .btn-close-panel{
+      width:30px;height:30px;border-radius:50%;border:none;background:#f0f4f8;
+      font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;
+    }
+    .btn-close-panel:hover{background:#e0e7ef}
+    .panel-body{flex:1;overflow-y:auto;padding:14px 20px}
+    .empty-leads{text-align:center;padding:50px 20px;color:#bbb}
+    .empty-leads .empty-icon{font-size:2.8rem;margin-bottom:10px}
+    .empty-leads p{font-size:0.9rem}
+    .leads-table{width:100%;border-collapse:collapse}
+    .leads-table th{
+      text-align:right;padding:7px 10px;font-size:0.75rem;font-weight:700;
+      color:#aaa;border-bottom:2px solid #e8edf3;
+    }
+    .lead-row{border-bottom:1px solid #f0f4f8;transition:background 0.15s}
+    .lead-row:hover{background:#f8fbff}
+    .lead-row td{padding:11px 10px;font-size:0.87rem;vertical-align:middle}
+    .lead-name{font-weight:600;color:#222}
+    .lead-phone{
+      display:inline-flex;align-items:center;gap:5px;
+      color:#00B4CC;font-weight:600;text-decoration:none;font-size:0.9rem;direction:ltr;
+    }
+    .lead-phone:hover{text-decoration:underline}
+    .lead-date{font-size:0.76rem;color:#aaa}
+    .lead-location{font-size:0.75rem;color:#888;max-width:110px}
+    .btn-delete-lead{
+      background:none;border:none;color:#ddd;font-size:0.95rem;
+      cursor:pointer;padding:3px 5px;border-radius:5px;transition:all 0.15s;
+    }
+    .btn-delete-lead:hover{color:#e53935;background:#fdecea}
+    .panel-footer{
+      padding:12px 20px;border-top:1px solid #e8edf3;
+      font-size:0.8rem;color:#aaa;text-align:center;
+    }
+    .sheets-note{font-size:0.72rem;color:#00B4CC;text-align:center;padding:6px 20px}
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:600px){
+      header{padding:0 12px;height:56px}
+      .logo span{display:none}
+      .hero{padding:18px 14px 14px}
+      .hero h1{font-size:1.25rem}
+      .hero p{font-size:0.83rem;margin-bottom:14px}
+      .filter-bar{padding:8px 14px}
+      .leads-panel{max-width:100%}
+      .lead-location{display:none}
+      .seo-section{padding:18px 16px}
+      .seo-section .seo-grid{flex-direction:column;gap:10px}
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div id="loading-screen">
+  <div class="load-icon">📡</div>
+  <h2>טוען נתוני אנטנות</h2>
+  <p id="loading-sub">מקור: משרד הגנת הסביבה</p>
+  <div class="progress-wrap"><div id="progress-bar"></div></div>
+  <div id="loading-label">מתחיל...</div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">📡 <span>מפת אנטנות סלולריות</span></div>
+  <div class="header-right"></div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>אז לאיזו חברת סלולר יש את הכיסוי הטוב ביותר אצלך?</h1>
+  <p>חפש את הכתובת שלך ובדוק מי מכסה את האזור — נתונים רשמיים ממשרד הגנת הסביבה</p>
+  <div class="search-wrapper">
+    <div class="search-box">
+      <input type="text" id="address-input" placeholder="הכתובת שלך, למשל: הרצל 10, תל אביב" autocomplete="off" />
+      <button onclick="searchAddress()">חפש</button>
+    </div>
+    <div id="suggestions"></div>
+  </div>
+  <button class="location-btn" onclick="useMyLocation()">📍 המיקום שלי</button>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <span class="filter-label">הצג:</span>
+  <button class="filter-btn active" id="filter-partner"
+    style="border-color:#00B4CC;background:#00B4CC;color:#fff"
+    onclick="toggleFilter('partner')">
+    <span class="filter-dot" style="background:#fff"></span> פרטנר
+  </button>
+  <button class="filter-btn active" id="filter-pelephone"
+    style="border-color:#0057A8;background:#0057A8;color:#fff"
+    onclick="toggleFilter('pelephone')">
+    <span class="filter-dot" style="background:#fff"></span> פלאפון
+  </button>
+  <button class="filter-btn active" id="filter-cellcom"
+    style="border-color:#9C27B0;background:#9C27B0;color:#fff"
+    onclick="toggleFilter('cellcom')">
+    <span class="filter-dot" style="background:#fff"></span> סלקום
+  </button>
+</div>
+
+<!-- MAP -->
+<div class="map-wrapper">
+  <div id="map"></div>
+</div>
+
+<!-- STATUS BAR -->
+<div class="status-bar">
+  <span id="status-text">הכנס כתובת כדי לנווט — כל האנטנות כבר על המפה</span>
+  <div id="counts">
+    <span class="count-pill" style="background:#e0f7fa;color:#00B4CC" id="count-partner">פרטנר: 0</span>
+    <span class="count-pill" style="background:#e3eef8;color:#0057A8" id="count-pelephone">פלאפון: 0</span>
+    <span class="count-pill" style="background:#f3e5f5;color:#9C27B0" id="count-cellcom">סלקום: 0</span>
+  </div>
+</div>
+
+<!-- SEO SECTION -->
+<section class="seo-section">
+  <h2>איך בודקים אנטנות קרובות — ולמה זה משנה לקליטה שלך</h2>
+  <p>
+    כל חברת סלולר מפעילה רשת אנטנות נפרדת. מיקום האנטנות הקרובות לבית שלך הוא שקובע את איכות הקליטה — לא המחיר ולא המותג. המפה מציגה את כל האנטנות הפעילות בישראל לפי נתונים רשמיים, כך שאפשר לראות בדיוק מי מכסה את האזור שלך.
+  </p>
+
+  <div class="seo-grid">
+    <div class="seo-card">
+      <h3>📡 פרטנר</h3>
+      <p>כיסוי רחב בכל הארץ, כולל אזורים פריפריאליים</p>
+    </div>
+    <div class="seo-card">
+      <h3>📶 פלאפון</h3>
+      <p>רשת 5G מתרחבת עם קליטה חזקה בערים הגדולות</p>
+    </div>
+    <div class="seo-card">
+      <h3>⭐ סלקום</h3>
+      <p>כיסוי איכותי וקליטה יציבה בפנים מבנים</p>
+    </div>
+  </div>
+
+  <section style="margin-top:24px">
+    <h2>למה הקליטה שלך גרועה — והפתרון האמיתי</h2>
+    <p style="margin-bottom:10px">לכל חברת סלולר יש רשת אנטנות משלה — ולא כל חברה מכסה את כל האזורים באותה רמה.</p>
+    <p style="margin-bottom:8px;font-size:0.88rem;color:#777">הסיבות הנפוצות לקליטה סלולרית גרועה:</p>
+    <ul style="padding-right:20px;font-size:0.88rem;color:#888;line-height:2">
+      <li>החברה שלך פשוט לא מכסה טוב את האזור שלך</li>
+      <li>קירות בטון עבים בבית או במרתף</li>
+      <li>עומס על הרשת בשעות שיא</li>
+      <li>תשתית ישנה של הספק באזורך</li>
+    </ul>
+    <p style="margin-top:12px;font-size:0.88rem;color:#555">הפתרון הכי פשוט? לעבור לחברה שיש לה קליטה טובה דווקא אצלך — ואנחנו יודעים בדיוק איזו חברה זו.</p>
+  </section>
+
+  <section style="margin-top:20px">
+    <h2>איך לבדוק את הכיסוי שלך — שלושה שלבים</h2>
+    <ol style="padding-right:20px;color:#888;font-size:0.88rem;line-height:2">
+      <li>חפש את הכתובת שלך בשורת החיפוש למעלה</li>
+      <li>ראה אילו אנטנות פעילות סביבך ושל איזו חברה</li>
+      <li>רוצה לעבור לחברה עם כיסוי טוב יותר? השאר פרטים ונסייע בחינם</li>
+    </ol>
+  </section>
+</section>
+
+
+<!-- WHY US SECTION -->
+<section style="background:#fff;border-top:1px solid #e8edf3;padding:28px 24px;max-width:700px;margin:0 auto;width:100%">
+  <h2 style="font-size:1rem;font-weight:700;color:#1a1a2e;margin-bottom:10px">מה ניתן לראות במפה הזו?</h2>
+  <p style="font-size:0.88rem;color:#888;margin-bottom:12px">המפה מציגה את כל האנטנות הפעילות של פרטנר, פלאפון וסלקום בישראל — כולל כתובת, טכנולוגיה (4G/5G) ומרחק מהמיקום שלך.</p>
+  <p style="font-size:0.88rem;color:#555;margin-bottom:8px;font-weight:600">מה תגלה במפה:</p>
+  <ul style="font-size:0.88rem;color:#555;line-height:2;list-style:none;padding:0">
+    <li>✓ מיקום מדויק של כל אנטנה לפי נתוני משרד הגנת הסביבה</li>
+    <li>✓ סינון לפי חברה — פרטנר, פלאפון, סלקום</li>
+    <li>✓ מרחק האנטנה הקרובה ביותר אליך</li>
+    <li>✓ רוצה עזרה לעבור? שירות ייעוץ חינמי ללא עמלות</li>
+  </ul>
+</section>
+
+<!-- INLINE LEAD FORM -->
+<section id="lead-form" style="background:#f7f9fc;border-top:1px solid #e8edf3;padding:32px 24px;text-align:center">
+  <h2 style="font-size:1.2rem;font-weight:700;color:#1a1a2e;margin-bottom:6px">רוצה לדעת איזו חברה הכי מתאימה לאזור שלך?</h2>
+  <p style="font-size:0.88rem;color:#888;margin-bottom:16px">נבדוק בשבילך ונחזור תוך שעה — שירות חינמי, ללא התחייבות</p>
+  <form id="inline-lead-form" onsubmit="submitInlineLead(event)" style="max-width:420px;margin:0 auto;text-align:right">
+    <div class="field">
+      <label for="il-name">שם</label>
+      <input type="text" id="il-name" name="name" placeholder="השם שלך" required />
+    </div>
+    <div class="field">
+      <label for="il-phone">טלפון</label>
+      <input type="tel" id="il-phone" name="phone" placeholder="05X-XXXXXXX" dir="ltr" required />
+    </div>
+    <div class="field">
+      <label for="il-city">אזור מגורים</label>
+      <input type="text" id="il-city" name="city" placeholder="עיר / שכונה" required />
+    </div>
+    <button type="submit" class="btn-submit" style="margin-top:8px">שלח — נבדוק ונחזור אליך ✓</button>
+  </form>
+  <div id="thank-you" style="display:none;padding:30px;text-align:center">
+    <div style="font-size:2rem;margin-bottom:8px">🎉</div>
+    <h2 style="font-size:1.2rem;color:#1a1a2e;margin-bottom:8px">קיבלנו!</h2>
+    <p style="font-size:0.9rem;color:#888">ניצור איתך קשר תוך שעה לכל היותר עם הפתרון המתאים לך.</p>
+  </div>
+</section>
+
+<!-- LEAD MODAL -->
+<div class="modal-overlay" id="lead-modal">
+  <div class="modal">
+    <div class="modal-icon">📞</div>
+    <h2>נבדוק מי מכסה אותך הכי טוב</h2>
+    <p class="subtitle" id="modal-subtitle">נשלח לך המלצה אישית לפי האזור שלך — בחינם ובלי התחייבות<br/><strong id="modal-info"></strong></p>
+    <div class="field">
+      <label>שם מלא</label>
+      <input type="text" id="lead-name" placeholder="ישראל ישראלי" />
+    </div>
+    <div class="field">
+      <label>מספר טלפון</label>
+      <input type="tel" id="lead-phone" placeholder="050-0000000" dir="ltr" />
+    </div>
+    <button class="btn-submit" onclick="submitLead()">שלח פרטים ✓</button>
+    <button class="btn-cancel" onclick="closeModal()">ביטול</button>
+  </div>
+</div>
+
+<!-- FAQ SECTION -->
+<section id="faq" itemscope itemtype="https://schema.org/FAQPage" style="background:#fff;border-top:1px solid #e8edf3;padding:28px 24px;max-width:700px;margin:0 auto;width:100%">
+  <h2 style="font-size:1rem;font-weight:700;color:#1a1a2e;margin-bottom:16px">שאלות נפוצות על מעבר חברת סלולר</h2>
+
+  <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question" style="margin-bottom:10px;border:1px solid #e8edf3;border-radius:10px;padding:12px 16px">
+    <h3 itemprop="name" style="font-size:0.9rem;font-weight:600;color:#222;margin:0;cursor:pointer">כמה עולה לעבור חברת סלולר?</h3>
+    <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+      <p itemprop="text" style="font-size:0.85rem;color:#888;margin-top:8px;line-height:1.7">מעבר חברת סלולר הוא בחינם — אין עלות על הניוד עצמו. חלק מהחברות גובות דמי חיבור או משלוח כרטיס סים, אך ברוב המקרים ניתן לוותר עליהם בהצטרפות מקוונת. אנחנו נדאג שתעברו לחבילה הכי טובה בתנאים הכי טובים.</p>
+    </div>
+  </div>
+
+  <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question" style="margin-bottom:10px;border:1px solid #e8edf3;border-radius:10px;padding:12px 16px">
+    <h3 itemprop="name" style="font-size:0.9rem;font-weight:600;color:#222;margin:0">האם אאבד את המספר שלי כשאעבור חברה?</h3>
+    <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+      <p itemprop="text" style="font-size:0.85rem;color:#888;margin-top:8px;line-height:1.7">לא. בישראל אפשר לשמור על אותו מספר סלולרי בכל מעבר בין חברות. התהליך נקרא "ניוד מספר" והוא פשוט וחינמי.</p>
+    </div>
+  </div>
+
+  <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question" style="margin-bottom:10px;border:1px solid #e8edf3;border-radius:10px;padding:12px 16px">
+    <h3 itemprop="name" style="font-size:0.9rem;font-weight:600;color:#222;margin:0">כמה זמן לוקח המעבר לחברה חדשה?</h3>
+    <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+      <p itemprop="text" style="font-size:0.85rem;color:#888;margin-top:8px;line-height:1.7">תהליך מעבר בין חברות סלולר (ניוד מספר) הוא פשוט ומהיר. ברגע שהמספר עובר לחברה החדשה, הסים הישן מתנתק אוטומטית — והמעבר עצמו לוקח כמה דקות בלבד. המספר שלך נשמר, ואתה ממשיך לקבל שיחות ללא הפרעה.</p>
+    </div>
+  </div>
+
+  <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question" style="margin-bottom:10px;border:1px solid #e8edf3;border-radius:10px;padding:12px 16px">
+    <h3 itemprop="name" style="font-size:0.9rem;font-weight:600;color:#222;margin:0">איזו חברת סלולר יש לה קליטה הכי טובה?</h3>
+    <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+      <p itemprop="text" style="font-size:0.85rem;color:#888;margin-top:8px;line-height:1.7">אין תשובה אחת לכולם — כל חברה מכסה אזורים שונים בצורה שונה. פלאפון קליטה, סלקום קליטה ופרטנר קליטה שונים מאזור לאזור. השאר פרטים ואנחנו נבדוק עבורך מי מכסה הכי טוב בדיוק באזור שלך.</p>
+    </div>
+  </div>
+
+  <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question" style="margin-bottom:10px;border:1px solid #e8edf3;border-radius:10px;padding:12px 16px">
+    <h3 itemprop="name" style="font-size:0.9rem;font-weight:600;color:#222;margin:0">מה קורה לחוזה הישן שלי כשאני עובר?</h3>
+    <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+      <p itemprop="text" style="font-size:0.85rem;color:#888;margin-top:8px;line-height:1.7">אם אתה בחוזה מחייב, ייתכן קנס יציאה. אם אתה על חבילה חודשית מתגלגלת — אפשר לעזוב בכל עת ללא קנס. נבדוק את המצב שלך ונמצא את הדרך הטובה ביותר לעבור.</p>
+    </div>
+  </div>
+
+  <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question" style="margin-bottom:10px;border:1px solid #e8edf3;border-radius:10px;padding:12px 16px">
+    <h3 itemprop="name" style="font-size:0.9rem;font-weight:600;color:#222;margin:0">האם השירות שלכם עולה כסף?</h3>
+    <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+      <p itemprop="text" style="font-size:0.85rem;color:#888;margin-top:8px;line-height:1.7">לא. הייעוץ והעזרה במעבר חברת סלולר הם חינמיים לחלוטין. השאר פרטים ואנחנו נחזור אליך.</p>
+    </div>
+  </div>
+</section>
+
+<script>
+// ══════════════════════════════════════════
+//  CONFIG — ערוך כאן
+// ══════════════════════════════════════════
+const CONFIG = {
+  WHATSAPP_NUMBER: '972549844409',
+
+  // Google Sheets — אופציונלי (ראה הוראות בתגובה)
+  // כדי להפעיל: צור Google Apps Script עם doPost, העתק URL
+  SHEETS_URL: 'https://script.google.com/macros/s/AKfycbwnIUxUEHhYwqfFfY4tzBSu95sTen0qvdSfV_vXL5sr5OF0UpjQ_D7Wq1nhuC0ZJZzB/exec',
+};
+
+/*
+  הוראות Google Sheets:
+  1. פתח Google Sheets → Extensions → Apps Script
+  2. הדבק:
+     function doPost(e){
+       const d=JSON.parse(e.postData.contents);
+       SpreadsheetApp.getActiveSheet().appendRow(
+         [new Date(),d.name,d.phone,d.location,d.date]);
+       return ContentService.createTextOutput('OK');
+     }
+  3. Deploy → New deployment → Web App → Anyone
+  4. העתק URL לתוך CONFIG.SHEETS_URL למעלה
+*/
+
+// ══════════════════════════════════════════
+//  COMPANIES
+// ══════════════════════════════════════════
+const COMPANIES = [
+  {key:'partner',   labels:['פרטנר','phi','partner'], color:'#00B4CC', name:'פרטנר',  short:'פרטנר'},
+  {key:'pelephone', labels:['פלאפון','pelephone'],     color:'#0057A8', name:'פלאפון', short:'פלאפון'},
+  {key:'cellcom',   labels:['סלקום','cellcom'],        color:'#9C27B0', name:'סלקום',  short:'סלקום'},
+];
+
+function matchCompany(raw){
+  if(!raw)return null;
+  const l=raw.toLowerCase();
+  return COMPANIES.find(c=>c.labels.some(lb=>l.includes(lb)))||null;
+}
+
+// ══════════════════════════════════════════
+//  ITM PROJECTION
+// ══════════════════════════════════════════
+proj4.defs('ITM','+proj=tmerc +lat_0=31.7343936111 +lon_0=35.2045169444 +k=1.0000067 +x_0=219529.584 +y_0=626907.39 +ellps=GRS80 +units=m +no_defs');
+function itmToLatLon(x,y){const[lon,lat]=proj4('ITM','WGS84',[x,y]);return{lat,lon}}
+function latLonToITM(lat,lon){return proj4('WGS84','ITM',[lon,lat])}
+
+// ══════════════════════════════════════════
+//  MAP
+// ══════════════════════════════════════════
+const map=L.map('map',{zoomControl:true,attributionControl:false}).setView([31.8,34.9],10);
+
+// Google Maps tiles
+L.tileLayer('https://mt{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}&hl=he&gl=IL',{
+  subdomains:['0','1','2','3'],maxZoom:21
+}).addTo(map);
+
+// Panes
+map.createPane('othersPane'); map.getPane('othersPane').style.zIndex=620;
+map.createPane('partnerPane');map.getPane('partnerPane').style.zIndex=620;
+
+// ══════════════════════════════════════════
+//  LOCATION PIN
+// ══════════════════════════════════════════
+const locationIcon=L.divIcon({
+  html:`<svg width="28" height="38" viewBox="0 0 28 38" xmlns="http://www.w3.org/2000/svg">
+    <defs><filter id="shL"><feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="rgba(0,0,0,0.35)"/></filter></defs>
+    <polygon points="7,24 21,24 14,38" fill="#E53935" filter="url(#shL)"/>
+    <circle cx="14" cy="14" r="13" fill="#E53935" filter="url(#shL)"/>
+    <circle cx="14" cy="14" r="13" fill="none" stroke="white" stroke-width="2.5"/>
+    <circle cx="14" cy="14" r="5" fill="white"/>
+  </svg>`,
+  className:'',iconSize:[28,38],iconAnchor:[14,38],popupAnchor:[0,-40]
+});
+let locationMarker=null;
+function placeLocationPin(lat,lon,label){
+  if(locationMarker)map.removeLayer(locationMarker);
+  locationMarker=L.marker([lat,lon],{icon:locationIcon,zIndexOffset:1000})
+    .bindPopup(`<div style="font-family:Heebo,Arial,sans-serif;padding:8px 12px;font-size:0.88rem;font-weight:600">📍 ${label}</div>`)
+    .addTo(map);
+}
+
+// ══════════════════════════════════════════
+//  DISTANCE
+// ══════════════════════════════════════════
+function calcDistance(lat1,lon1,lat2,lon2){
+  const R=6371000,φ1=lat1*Math.PI/180,φ2=lat2*Math.PI/180;
+  const Δφ=(lat2-lat1)*Math.PI/180,Δλ=(lon2-lon1)*Math.PI/180;
+  const a=Math.sin(Δφ/2)**2+Math.cos(φ1)*Math.cos(φ2)*Math.sin(Δλ/2)**2;
+  const d=R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+  return d<1000?`${Math.round(d)} מ'`:`${(d/1000).toFixed(1)} ק"מ`;
+}
+
+// ══════════════════════════════════════════
+//  ICONS — לוגואים מקבצי תמונה
+// ══════════════════════════════════════════
+const ICONS={
+  cellcom:   L.icon({iconUrl:'Projectphotos/סמלסלקום.png',  iconSize:[20,20],iconAnchor:[10,10],popupAnchor:[0,-12]}),
+  pelephone: L.icon({iconUrl:'Projectphotos/סמלפלאפון.png', iconSize:[20,20],iconAnchor:[10,10],popupAnchor:[0,-12]}),
+  partner:   L.icon({iconUrl:'Projectphotos/סמלפרטנר.png',  iconSize:[20,20],iconAnchor:[10,10],popupAnchor:[0,-12]}),
+};
+
+// ══════════════════════════════════════════
+//  CLUSTER
+// ══════════════════════════════════════════
+const clusterGroup=L.markerClusterGroup({
+  maxClusterRadius:25,disableClusteringAtZoom:12,chunkedLoading:true,
+  iconCreateFunction(cluster){
+    const ms=cluster.getAllChildMarkers();
+    const cnt={partner:0,pelephone:0,cellcom:0};
+    ms.forEach(m=>{if(m.options.companyKey)cnt[m.options.companyKey]++});
+    const dom=Object.entries(cnt).sort((a,b)=>b[1]-a[1])[0][0];
+    const co=COMPANIES.find(c=>c.key===dom);
+    const n=cluster.getChildCount(),sz=n>100?46:n>20?40:34;
+    return L.divIcon({
+      html:`<div style="width:${sz}px;height:${sz}px;background:${co.color};color:#fff;
+        border-radius:50%;display:flex;align-items:center;justify-content:center;
+        font-family:Heebo,Arial,sans-serif;font-size:${sz>40?14:12}px;font-weight:700;
+        border:3px solid white;box-shadow:0 2px 10px rgba(0,0,0,0.32)">${n}</div>`,
+      className:'',iconSize:[sz,sz],iconAnchor:[sz/2,sz/2]
+    });
+  }
+}).addTo(map);
+
+// ══════════════════════════════════════════
+//  FILTER
+// ══════════════════════════════════════════
+const companyVisible={partner:true,pelephone:true,cellcom:true};
+const markersByCompany={partner:[],pelephone:[],cellcom:[]};
+
+function toggleFilter(key){
+  const btn=document.getElementById('filter-'+key);
+  const co=COMPANIES.find(c=>c.key===key);
+  companyVisible[key]=!companyVisible[key];
+  if(companyVisible[key]){
+    btn.style.background=co.color;btn.style.color='#fff';
+    clusterGroup.addLayers(markersByCompany[key]);
+  }else{
+    btn.style.background='#fff';btn.style.color=co.color;
+    clusterGroup.removeLayers(markersByCompany[key]);
+  }
+}
+
+// ══════════════════════════════════════════
+//  DATA — CACHE + LOAD
+// ══════════════════════════════════════════
+let allAntennas=[];
+let currentCenter=null;
+
+// מקור: data.gov.il — נתוני אנטנות סלולריות פעילות (מרץ 2025)
+// [lat, lon, companyKey, address, city, tech]
+async function loadAllData(){
+  setProgress(20,'טוען נתוני אנטנות...');
+  const companyMap={};
+  COMPANIES.forEach(c=>companyMap[c.key]=c);
+
+  allAntennas=ANTENNAS_DATA.map(([lat,lon,key,address,city,tech])=>({
+    lat,lon,company:companyMap[key],address,city,tech
+  })).filter(a=>a.company);
+
+  setProgress(100,'מוכן!');
+  document.getElementById('loading-sub').textContent=`נטענו ${allAntennas.length.toLocaleString()} אנטנות מנתונים מקומיים`;
+  setTimeout(()=>{document.getElementById('loading-screen').style.display='none';showAllAntennas()},300);
+}
+
+function setProgress(pct,label){
+  document.getElementById('progress-bar').style.width=pct+'%';
+  document.getElementById('loading-label').textContent=label;
+}
+
+// ══════════════════════════════════════════
+//  SHOW ALL ANTENNAS
+// ══════════════════════════════════════════
+function showAllAntennas(){
+  const counts={partner:0,pelephone:0,cellcom:0};
+  const markers=[];
+  allAntennas.forEach(a=>{
+    counts[a.company.key]++;
+    const pane=a.company.key==='partner'?'partnerPane':'othersPane';
+    const m=L.marker([a.lat,a.lon],{icon:ICONS[a.company.key],pane,companyKey:a.company.key})
+      .bindPopup(buildPopup(a));
+    markersByCompany[a.company.key].push(m);
+    markers.push(m);
+  });
+  clusterGroup.addLayers(markers);
+  document.getElementById('counts').style.display='flex';
+  document.getElementById('count-partner').textContent=`פרטנר: ${counts.partner.toLocaleString()}`;
+  document.getElementById('count-pelephone').textContent=`פלאפון: ${counts.pelephone.toLocaleString()}`;
+  document.getElementById('count-cellcom').textContent=`סלקום: ${counts.cellcom.toLocaleString()}`;
+  setStatus(`${allAntennas.length.toLocaleString()} אנטנות פעילות — חפש כתובת או זוז בחופשיות`);
+}
+
+// ══════════════════════════════════════════
+//  POPUP
+// ══════════════════════════════════════════
+function buildPopup(a){
+  const label=a.address||a.company.name;
+  const dist=currentCenter?`<p>📏 מרחק: <strong>${calcDistance(currentCenter.lat,currentCenter.lon,a.lat,a.lon)}</strong></p>`:'';
+  const gens=a.tech?a.tech.match(/\d+/g)?.sort((x,y)=>x-y).join(' '):null;
+  return`<div class="popup-inner">
+    <span class="popup-badge" style="background:${a.company.color}">${a.company.name}</span>
+    ${a.address?`<p>📍 ${a.address}${a.city?', '+a.city:''}</p>`:''}
+    ${gens?`<p>📶 אנטנה זו תומכת בדורות: ${gens}</p>`:''}
+    ${dist}
+    <button class="popup-cta" style="background:${a.company.color}"
+      onclick="openModal('${label.replace(/'/g,'').replace(/"/g,'״')}','${a.company.name}')">
+      🙋 דבר עם נציג — נסייע לך בחינם
+    </button>
+  </div>`;
+}
+
+// ══════════════════════════════════════════
+//  SEARCH
+// ══════════════════════════════════════════
+async function searchAddress(){
+  const address=document.getElementById('address-input').value.trim();
+  if(!address)return;
+  setStatus('מחפש כתובת...');
+  try{
+    const res=await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address+', ישראל')}&format=json&limit=1`,{headers:{'Accept-Language':'he'}});
+    const data=await res.json();
+    if(!data.length){setStatus('כתובת לא נמצאה — נסה שוב');return}
+    currentCenter={lat:parseFloat(data[0].lat),lon:parseFloat(data[0].lon)};
+    map.setView([currentCenter.lat,currentCenter.lon],16);
+    const label=data[0].display_name.split(',').slice(0,2).join(',');
+    placeLocationPin(currentCenter.lat,currentCenter.lon,label);
+    setStatus(`מציג: ${label}`);
+  }catch{setStatus('שגיאה בחיפוש כתובת')}
+}
+
+function useMyLocation(){
+  if(!navigator.geolocation){setStatus('הדפדפן לא תומך במיקום');return}
+  setStatus('מאתר מיקום...');
+  navigator.geolocation.getCurrentPosition(
+    p=>{
+      currentCenter={lat:p.coords.latitude,lon:p.coords.longitude};
+      map.setView([currentCenter.lat,currentCenter.lon],16);
+      placeLocationPin(currentCenter.lat,currentCenter.lon,'המיקום שלי');
+      setStatus('מציג מיקומך הנוכחי');
+    },
+    ()=>setStatus('לא ניתן לגשת למיקום — הכנס כתובת ידנית')
+  );
+}
+
+// ══════════════════════════════════════════
+//  AUTOCOMPLETE
+// ══════════════════════════════════════════
+const inputEl=document.getElementById('address-input');
+const suggestionsEl=document.getElementById('suggestions');
+let debounceTimer=null,lastQuery='';
+
+inputEl.addEventListener('input',()=>{
+  clearTimeout(debounceTimer);
+  const q=inputEl.value.trim();
+  if(q.length<2){hideSuggestions();return}
+  debounceTimer=setTimeout(()=>fetchSuggestions(q),300);
+});
+inputEl.addEventListener('keydown',e=>{
+  if(e.key==='Enter'){hideSuggestions();searchAddress()}
+  if(e.key==='Escape')hideSuggestions();
+});
+document.addEventListener('click',e=>{if(!e.target.closest('.search-wrapper'))hideSuggestions()});
+
+async function fetchSuggestions(q){
+  if(q===lastQuery)return;lastQuery=q;
+  try{
+    const res=await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q+', ישראל')}&format=json&limit=6&addressdetails=1`,{headers:{'Accept-Language':'he'}});
+    const data=await res.json();
+    if(q!==lastQuery)return;
+    renderSuggestions(data);
+  }catch{hideSuggestions()}
+}
+
+function renderSuggestions(results){
+  if(!results.length){hideSuggestions();return}
+  suggestionsEl.innerHTML=results.map(r=>{
+    const addr=r.address||{};
+    const main=addr.road?`${addr.road}${addr.house_number?' '+addr.house_number:''}`:r.display_name.split(',')[0];
+    const city=addr.city||addr.town||addr.village||addr.suburb||'';
+    const sub=[city,addr.county].filter(Boolean).join(', ');
+    const icon=r.class==='highway'?'🛣️':r.type==='house'?'🏠':r.class==='amenity'?'🏢':'📍';
+    return`<div class="suggestion-item" onclick="selectSuggestion(${r.lat},${r.lon},'${escQ(main)}')">
+      <span>${icon}</span>
+      <div><div class="suggestion-main">${main}</div>${sub?`<div class="suggestion-sub">${sub}</div>`:''}</div>
+    </div>`;
+  }).join('');
+  suggestionsEl.style.display='block';
+}
+
+function selectSuggestion(lat,lon,name){
+  inputEl.value=name;hideSuggestions();
+  currentCenter={lat:parseFloat(lat),lon:parseFloat(lon)};
+  map.setView([currentCenter.lat,currentCenter.lon],17);
+  placeLocationPin(currentCenter.lat,currentCenter.lon,name);
+  setStatus(`מציג: ${name}`);
+}
+
+function hideSuggestions(){suggestionsEl.style.display='none';lastQuery=''}
+function escQ(s){return s.replace(/'/g,"\\'")}
+
+// ══════════════════════════════════════════
+//  LEADS — Google Sheets only
+// ══════════════════════════════════════════
+// נקה נתוני לידים ישנים מהדפדפן
+localStorage.removeItem('antenna_leads');
+
+function addLead(name,phone,location){
+  const lead={
+    name,phone,location,
+    company:currentLeadCompany,
+    date:new Date().toLocaleDateString('he-IL',{day:'2-digit',month:'2-digit',year:'2-digit'}),
+    time:new Date().toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'}),
+  };
+  sendToSheets(lead);
+}
+
+async function sendToSheets(lead){
+  if(!CONFIG.SHEETS_URL)return;
+  try{
+    await fetch(CONFIG.SHEETS_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(lead)});
+  }catch(e){console.warn('Sheets error:',e)}
+}
+
+// ══════════════════════════════════════════
+//  MODAL
+// ══════════════════════════════════════════
+let currentLeadCompany='partner';
+
+function openModal(info,companyName){
+  if(companyName==='פלאפון') currentLeadCompany='pelephone';
+  else if(companyName==='סלקום') currentLeadCompany='cellcom';
+  else currentLeadCompany='partner';
+  document.getElementById('modal-info').textContent=info||companyName||'כיסוי סלולרי';
+  document.getElementById('modal-subtitle').innerHTML=
+    `יש <strong>${info||companyName}</strong> באזורך.<br/>השאר פרטים ונציג יחזור אליך.`;
+  document.getElementById('lead-modal').classList.add('open');
+}
+
+function closeModal(){
+  document.getElementById('lead-modal').classList.remove('open');
+  document.getElementById('lead-name').value='';
+  document.getElementById('lead-phone').value='';
+}
+
+function submitLead(){
+  const name=document.getElementById('lead-name').value.trim();
+  const phone=document.getElementById('lead-phone').value.trim();
+  if(!name||!phone){alert('אנא מלא שם וטלפון');return}
+  const location=inputEl.value.trim()||'';
+  addLead(name,phone,location);
+  closeModal();
+  setStatus(`✅ פרטים נשלחו! תודה ${name}`);
+}
+
+// ══════════════════════════════════════════
+//  INLINE LEAD FORM
+// ══════════════════════════════════════════
+function submitInlineLead(e){
+  e.preventDefault();
+  const name=document.getElementById('il-name').value.trim();
+  const phone=document.getElementById('il-phone').value.trim();
+  const city=document.getElementById('il-city').value.trim();
+  const company=document.getElementById('il-company').value;
+  const problem=document.getElementById('il-problem').value.trim();
+  const lead={name,phone,location:city,company:company||'unknown',problem,
+    date:new Date().toLocaleDateString('he-IL',{day:'2-digit',month:'2-digit',year:'2-digit'}),
+    time:new Date().toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'})};
+  sendToSheets(lead);
+  document.getElementById('inline-lead-form').style.display='none';
+  document.getElementById('thank-you').style.display='block';
+}
+
+// ══════════════════════════════════════════
+//  HELPERS
+// ══════════════════════════════════════════
+function setStatus(msg){document.getElementById('status-text').textContent=msg}
+loadAllData();
+</script>
+</body>
+</html>
