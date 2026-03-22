@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://[הדומיין-שלך].co.il/sitemap.xml
+Sitemap: https://xyonatan2702x.github.io/antenna-map/sitemap.xml
