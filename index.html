@@ -383,17 +383,23 @@
     .sheets-note{font-size:0.72rem;color:#00B4CC;text-align:center;padding:6px 20px}
 
     /* ── BLOG ── */
-    .blog-section{background:#fff;border-top:1px solid #e8edf3;padding:32px 24px;max-width:700px;margin:0 auto;width:100%}
-    .blog-section h2.blog-main-title{font-size:1.1rem;font-weight:700;color:#1a1a2e;margin-bottom:20px}
-    .blog-card{border:1px solid #e8edf3;border-radius:12px;padding:20px;margin-bottom:16px;cursor:pointer;transition:box-shadow 0.2s}
-    .blog-card:hover{box-shadow:0 4px 16px rgba(0,180,204,0.1)}
-    .blog-card h3{font-size:0.95rem;font-weight:700;color:#1a1a2e;margin-bottom:8px}
-    .blog-card .blog-excerpt{font-size:0.85rem;color:#888;line-height:1.6;margin-bottom:10px}
-    .blog-read-more{font-size:0.82rem;color:#00B4CC;font-weight:600;cursor:pointer;background:none;border:none;padding:0;font-family:'Heebo',Arial,sans-serif}
-    .blog-full-content{display:none;font-size:0.88rem;color:#555;line-height:1.9;margin-top:14px;border-top:1px solid #f0f4f8;padding-top:14px;white-space:pre-line}
+    .blog-section{background:#f7f9fc;border-top:1px solid #e8edf3;padding:40px 24px;width:100%}
+    .blog-section-inner{max-width:700px;margin:0 auto}
+    .blog-section h2.blog-main-title{font-size:1.1rem;font-weight:700;color:#1a1a2e;margin-bottom:24px;padding-bottom:12px;border-bottom:2px solid #00B4CC;display:inline-block}
+    .blog-card{background:#fff;border:none;border-radius:16px;padding:24px 28px;margin-bottom:20px;box-shadow:0 2px 12px rgba(0,0,0,0.06);transition:box-shadow 0.2s,transform 0.2s}
+    .blog-card:hover{box-shadow:0 6px 24px rgba(0,180,204,0.12);transform:translateY(-2px)}
+    .blog-card-header{display:flex;align-items:flex-start;gap:14px;margin-bottom:10px}
+    .blog-card-icon{width:40px;height:40px;min-width:40px;background:#e0f7fa;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem}
+    .blog-card h3{font-size:1rem;font-weight:700;color:#1a1a2e;margin:0 0 4px;line-height:1.4}
+    .blog-card .blog-excerpt{font-size:0.87rem;color:#999;line-height:1.65;margin-bottom:14px}
+    .blog-read-more{display:inline-flex;align-items:center;gap:5px;font-size:0.84rem;color:#00B4CC;font-weight:700;cursor:pointer;background:none;border:none;padding:0;font-family:'Heebo',Arial,sans-serif;transition:gap 0.2s}
+    .blog-read-more:hover{gap:8px}
+    .blog-full-content{display:none;font-size:0.88rem;color:#444;line-height:1.9;margin-top:18px;padding-top:18px;border-top:1px solid #e8edf3}
     .blog-full-content.open{display:block}
-    .blog-full-content h2{font-size:0.92rem;font-weight:700;color:#1a1a2e;margin:16px 0 6px}
-    .blog-cta-link{color:#00B4CC;font-weight:700;text-decoration:none}
+    .blog-full-content h2{font-size:0.93rem;font-weight:700;color:#1a1a2e;margin:20px 0 8px;padding-right:10px;border-right:3px solid #00B4CC}
+    .blog-cta-link{display:inline-block;margin-top:16px;color:#fff;background:#00B4CC;padding:10px 20px;border-radius:8px;font-weight:700;font-size:0.86rem;text-decoration:none;transition:background 0.2s}
+    .blog-cta-link:hover{background:#009ab0}
+    @media(max-width:600px){.blog-section{padding:28px 16px}.blog-card{padding:18px 16px}.blog-card h3{font-size:0.93rem}}
 
     /* ── RESPONSIVE ── */
     @media(max-width:600px){
@@ -651,11 +657,15 @@
 </section>
 
 <section class="blog-section" id="blog">
+  <div class="blog-section-inner">
   <h2 class="blog-main-title">מדריכים ומאמרים — כל מה שצריך לדעת על קליטה סלולרית</h2>
 
   <!-- פוסט 1 -->
   <article class="blog-card" itemscope itemtype="https://schema.org/Article">
-    <h3 itemprop="headline">סגירת רשת דור 3 בישראל — מה יקרה לטלפון שלך ב-2026?</h3>
+    <div class="blog-card-header">
+      <div class="blog-card-icon">📶</div>
+      <h3 itemprop="headline">סגירת רשת דור 3 בישראל — מה יקרה לטלפון שלך ב-2026?</h3>
+    </div>
     <p class="blog-excerpt">החל משנת 2026, איכות הקליטה ברשתות דור 3 תרד משמעותית. מכשירים ישנים שאינם תומכים בדור 4 יסבלו מניתוקים תכופים. הנה כל מה שצריך לדעת.</p>
     <button class="blog-read-more" onclick="togglePost(this)">קרא עוד ↓</button>
     <div class="blog-full-content" itemprop="articleBody">
@@ -679,7 +689,10 @@
 
   <!-- פוסט 2 -->
   <article class="blog-card" itemscope itemtype="https://schema.org/Article">
-    <h3 itemprop="headline">איזו חברת סלולר מכסה הכי טוב את האזור שלך? המדריך לבדיקת קליטה לפי כתובת</h3>
+    <div class="blog-card-header">
+      <div class="blog-card-icon">📍</div>
+      <h3 itemprop="headline">איזו חברת סלולר מכסה הכי טוב את האזור שלך? המדריך לבדיקת קליטה לפי כתובת</h3>
+    </div>
     <p class="blog-excerpt">אין חברה אחת שהיא "הכי טובה" לכולם. הקליטה משתנה מרחוב לרחוב ומבניין לבניין. הנה איך בודקים נכון.</p>
     <button class="blog-read-more" onclick="togglePost(this)">קרא עוד ↓</button>
     <div class="blog-full-content" itemprop="articleBody">
@@ -700,7 +713,10 @@
 
   <!-- פוסט 3 -->
   <article class="blog-card" itemscope itemtype="https://schema.org/Article">
-    <h3 itemprop="headline">ניוד מספר סלולרי — כמה זמן לוקח, האם מאבדים את המספר, ומה לא לעשות</h3>
+    <div class="blog-card-header">
+      <div class="blog-card-icon">🔄</div>
+      <h3 itemprop="headline">ניוד מספר סלולרי — כמה זמן לוקח, האם מאבדים את המספר, ומה לא לעשות</h3>
+    </div>
     <p class="blog-excerpt">ניוד מספר לוקח בין חצי שעה ל-3 שעות בלבד. המספר שלכם לא ייעלם. אבל יש טעות אחת שחשוב מאוד להימנע ממנה.</p>
     <button class="blog-read-more" onclick="togglePost(this)">קרא עוד ↓</button>
     <div class="blog-full-content" itemprop="articleBody">
@@ -724,7 +740,10 @@
 
   <!-- פוסט 4 -->
   <article class="blog-card" itemscope itemtype="https://schema.org/Article">
-    <h3 itemprop="headline">פרטנר, פלאפון, סלקום — מי בעצם מפעיל את מי? המדריך לתשתיות הסלולר בישראל</h3>
+    <div class="blog-card-header">
+      <div class="blog-card-icon">🏗️</div>
+      <h3 itemprop="headline">פרטנר, פלאפון, סלקום — מי בעצם מפעיל את מי? המדריך לתשתיות הסלולר בישראל</h3>
+    </div>
     <p class="blog-excerpt">בישראל יש עשרות חברות סלולר אבל רק 3 רשתות אנטנות. אם תעברו לחברה שרוכבת על אותה תשתית — הקליטה לא תשתנה.</p>
     <button class="blog-read-more" onclick="togglePost(this)">קרא עוד ↓</button>
     <div class="blog-full-content" itemprop="articleBody">
@@ -747,7 +766,10 @@
 
   <!-- פוסט 5 -->
   <article class="blog-card" itemscope itemtype="https://schema.org/Article">
-    <h3 itemprop="headline">סלולר כשר דור 4 — אילו חבילות עדיין עובדות ואילו מכשירים נתמכים</h3>
+    <div class="blog-card-header">
+      <div class="blog-card-icon">✡️</div>
+      <h3 itemprop="headline">סלולר כשר דור 4 — אילו חבילות עדיין עובדות ואילו מכשירים נתמכים</h3>
+    </div>
     <p class="blog-excerpt">בעקבות פינוי התדרים, מכשירים כשרים ישנים מתנתקים בתוך מבנים. הנה כל מה שצריך לדעת על המעבר לדור 4 כשר.</p>
     <button class="blog-read-more" onclick="togglePost(this)">קרא עוד ↓</button>
     <div class="blog-full-content" itemprop="articleBody">
@@ -769,6 +791,7 @@
     </div>
   </article>
 
+  </div>
 </section>
 
 <script>
