@@ -298,6 +298,8 @@
     .modal .subtitle{text-align:center;font-size:0.88rem;color:#999;margin-bottom:22px;line-height:1.5}
     .modal .subtitle strong{color:#00B4CC}
     .field{margin-bottom:12px}
+    .consent-row{display:flex;align-items:flex-start;gap:8px;margin:4px 0 12px;font-size:0.78rem;color:#666;line-height:1.5;text-align:right;cursor:pointer}
+    .consent-row input{margin-top:3px;flex:0 0 auto;width:auto}
     .field label{display:block;font-size:0.82rem;font-weight:600;color:#555;margin-bottom:5px}
     .field input{
       width:100%;padding:11px 14px;border:1.5px solid #e0e7ef;border-radius:10px;
@@ -581,6 +583,8 @@
       <label for="il-city">אזור מגורים</label>
       <input type="text" id="il-city" name="city" placeholder="עיר / שכונה" required />
     </div>
+    <input type="text" id="il-website" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" />
+    <label class="consent-row"><input type="checkbox" id="il-consent" name="consent" required /> <span>אני מאשר/ת שפרטיי יועברו לנציג או לספק שירות מתאים, שיחזור אליי בטלפון או בוואטסאפ</span></label>
     <button type="submit" class="btn-submit" style="margin-top:8px">שלח — נבדוק ונחזור אליך ✓</button>
   </form>
   <div id="thank-you" style="display:none;padding:30px;text-align:center">
@@ -604,6 +608,7 @@
       <label>מספר טלפון</label>
       <input type="tel" id="lead-phone" placeholder="050-0000000" dir="ltr" />
     </div>
+    <label class="consent-row"><input type="checkbox" id="lead-consent" /> <span>אני מאשר/ת שפרטיי יועברו לנציג או לספק שירות מתאים, שיחזור אליי בטלפון או בוואטסאפ</span></label>
     <button class="btn-submit" onclick="submitLead()">שלח פרטים ✓</button>
     <button class="btn-cancel" onclick="closeModal()">ביטול</button>
   </div>
@@ -800,6 +805,10 @@
 // ══════════════════════════════════════════
 const CONFIG = {
   WHATSAPP_NUMBER: '972549844409',
+
+  // n8n — קליטת לידים (בדיקה, שמירה והתראה בטלגרם). השאר ריק כדי לכבות.
+  LEADS_WEBHOOK_URL: 'https://n8n.49-13-155-101.sslip.io/webhook/leads-intake',
+  LEADS_SOURCE: 'antenna-map',
 
   // Google Sheets — אופציונלי (ראה הוראות בתגובה)
   // כדי להפעיל: צור Google Apps Script עם doPost, העתק URL
@@ -1101,14 +1110,31 @@ function escQ(s){return s.replace(/'/g,"\\'")}
 // נקה נתוני לידים ישנים מהדפדפן
 localStorage.removeItem('antenna_leads');
 
-function addLead(name,phone,location){
+function addLead(name,phone,location,consent){
   const lead={
     name,phone,location,
     company:currentLeadCompany,
+    consent:consent?'yes':'no',
     date:new Date().toLocaleDateString('he-IL',{day:'2-digit',month:'2-digit',year:'2-digit'}),
     time:new Date().toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'}),
   };
   sendToSheets(lead);
+  sendToN8n(lead);
+}
+
+// שליחה ל-n8n כטופס רגיל (בלי preflight), במקביל לגיליון. כשל כאן לא עוצר את הגולש.
+async function sendToN8n(lead,extra){
+  if(!CONFIG.LEADS_WEBHOOK_URL)return;
+  try{
+    const body=new URLSearchParams({
+      source:CONFIG.LEADS_SOURCE,
+      name:lead.name||'',phone:lead.phone||'',location:lead.location||'',
+      company:lead.company||'',consent:lead.consent||'no',
+      page_url:window.location.href,
+      ...(extra||{}),
+    });
+    await fetch(CONFIG.LEADS_WEBHOOK_URL,{method:'POST',mode:'no-cors',body});
+  }catch(e){console.warn('n8n error:',e)}
 }
 
 async function sendToSheets(lead){
@@ -1137,14 +1163,16 @@ function closeModal(){
   document.getElementById('lead-modal').classList.remove('open');
   document.getElementById('lead-name').value='';
   document.getElementById('lead-phone').value='';
+  document.getElementById('lead-consent').checked=false;
 }
 
 function submitLead(){
   const name=document.getElementById('lead-name').value.trim();
   const phone=document.getElementById('lead-phone').value.trim();
   if(!name||!phone){alert('אנא מלא שם וטלפון');return}
+  if(!document.getElementById('lead-consent').checked){alert('כדי שנוכל לחזור אליך, יש לאשר את העברת הפרטים');return}
   const location=inputEl.value.trim()||'';
-  addLead(name,phone,location);
+  addLead(name,phone,location,true);
   closeModal();
   setStatus(`✅ פרטים נשלחו! תודה ${name}`);
 }
@@ -1157,12 +1185,15 @@ function submitInlineLead(e){
   const name=document.getElementById('il-name').value.trim();
   const phone=document.getElementById('il-phone').value.trim();
   const city=document.getElementById('il-city').value.trim();
-  const company=document.getElementById('il-company').value;
-  const problem=document.getElementById('il-problem').value.trim();
-  const lead={name,phone,location:city,company:company||'unknown',problem,
+  const val=id=>{const el=document.getElementById(id);return el?el.value.trim():''};
+  const company=val('il-company');
+  const problem=val('il-problem');
+  const consent=document.getElementById('il-consent').checked;
+  const lead={name,phone,location:city,company:company||'unknown',problem,consent:consent?'yes':'no',
     date:new Date().toLocaleDateString('he-IL',{day:'2-digit',month:'2-digit',year:'2-digit'}),
     time:new Date().toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'})};
   sendToSheets(lead);
+  sendToN8n({...lead,company:company||''},{website:val('il-website')});
   document.getElementById('inline-lead-form').style.display='none';
   document.getElementById('thank-you').style.display='block';
 }
