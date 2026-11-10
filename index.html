@@ -128,7 +128,7 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.9.0/proj4.js"></script>
-  <script src="antennas-data.js"></script>
+  <script src="antennas-data.js?v=2026-11"></script>
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
 
   <style>
@@ -810,6 +810,9 @@ const CONFIG = {
   LEADS_WEBHOOK_URL: 'https://n8n.49-13-155-101.sslip.io/webhook/leads-intake',
   LEADS_SOURCE: 'antenna-map',
 
+  // n8n — מדידה אנונימית: צפיות, פתיחות טופס ושליחות. השאר ריק כדי לכבות.
+  EVENTS_URL: 'https://n8n.49-13-155-101.sslip.io/webhook/site-event',
+
   // Google Sheets — אופציונלי (ראה הוראות בתגובה)
   // כדי להפעיל: צור Google Apps Script עם doPost, העתק URL
   SHEETS_URL: 'https://script.google.com/macros/s/AKfycbwnIUxUEHhYwqfFfY4tzBSu95sTen0qvdSfV_vXL5sr5OF0UpjQ_D7Wq1nhuC0ZJZzB/exec',
@@ -822,7 +825,8 @@ const CONFIG = {
      function doPost(e){
        const d=JSON.parse(e.postData.contents);
        SpreadsheetApp.getActiveSheet().appendRow(
-         [new Date(),d.name,d.phone,d.location,d.date]);
+         [new Date(),d.name,d.phone,d.location,d.company||'',d.consent||'','חדש','']);
+       // עמודות: תאריך | שם | טלפון | אזור | חברה | הסכמה | סטטוס | הערות
        return ContentService.createTextOutput('OK');
      }
   3. Deploy → New deployment → Web App → Anyone
@@ -1137,6 +1141,26 @@ async function sendToN8n(lead,extra){
   }catch(e){console.warn('n8n error:',e)}
 }
 
+// מדידה אנונימית (בלי פרטים מזהים): סוג האירוע, העמוד, האתר שממנו הגיעו וסוג המכשיר.
+function track(type){
+  if(!CONFIG.EVENTS_URL)return;
+  try{
+    let ref='';
+    try{ref=document.referrer?new URL(document.referrer).hostname:''}catch(e){}
+    if(ref===window.location.hostname)ref='';
+    const body=new URLSearchParams({
+      source:CONFIG.LEADS_SOURCE,type,
+      page:window.location.pathname,ref,
+      device:window.matchMedia('(max-width: 768px)').matches?'mobile':'desktop',
+    });
+    fetch(CONFIG.EVENTS_URL,{method:'POST',mode:'no-cors',body,keepalive:true}).catch(()=>{});
+  }catch(e){}
+}
+// צפייה אחת לכל ביקור
+try{
+  if(!sessionStorage.getItem('am_viewed')){sessionStorage.setItem('am_viewed','1');track('view')}
+}catch(e){track('view')}
+
 async function sendToSheets(lead){
   if(!CONFIG.SHEETS_URL)return;
   try{
@@ -1157,6 +1181,7 @@ function openModal(info,companyName){
   document.getElementById('modal-subtitle').innerHTML=
     `יש <strong>${info||companyName}</strong> באזורך.<br/>השאר פרטים ונציג יחזור אליך.`;
   document.getElementById('lead-modal').classList.add('open');
+  track('form_open');
 }
 
 function closeModal(){
@@ -1173,6 +1198,7 @@ function submitLead(){
   if(!document.getElementById('lead-consent').checked){alert('כדי שנוכל לחזור אליך, יש לאשר את העברת הפרטים');return}
   const location=inputEl.value.trim()||'';
   addLead(name,phone,location,true);
+  track('form_submit');
   closeModal();
   setStatus(`✅ פרטים נשלחו! תודה ${name}`);
 }
@@ -1194,6 +1220,7 @@ function submitInlineLead(e){
     time:new Date().toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'})};
   sendToSheets(lead);
   sendToN8n({...lead,company:company||''},{website:val('il-website')});
+  track('form_submit');
   document.getElementById('inline-lead-form').style.display='none';
   document.getElementById('thank-you').style.display='block';
 }
