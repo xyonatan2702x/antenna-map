@@ -1,0 +1,42 @@
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{font-family:'Heebo',Arial,sans-serif;color:#222;background:#f7f9fc;margin:0;line-height:1.7}
+a{color:#007a8c}
+.top{background:#1a1a2e;color:#fff;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.top a{color:#fff;text-decoration:none}.top .brand{font-weight:700}.top .back{font-size:.85rem;background:#00B4CC;padding:6px 14px;border-radius:20px;font-weight:600;white-space:nowrap}
+main{max-width:860px;margin:0 auto;padding:20px 20px 40px;background:#fff}
+.crumbs{font-size:.8rem;color:#666;margin-bottom:10px}
+h1{font-size:1.6rem;line-height:1.3;margin:0 0 10px;color:#1a1a2e;font-weight:900}
+h2{font-size:1.15rem;margin:32px 0 10px;color:#1a1a2e}
+h3{font-size:1rem;margin:18px 0 6px;color:#1a1a2e}
+.lede{font-size:1rem;color:#333;margin:0 0 18px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.card{border-radius:14px;padding:14px 10px;text-align:center;color:#fff}
+.card .num{font-size:1.9rem;font-weight:900;line-height:1.1}.card .lbl{font-weight:700}.card .sub{font-size:.78rem;opacity:.92}
+.card.partner,.dot.partner{background:#008a9c}.card.pelephone,.dot.pelephone{background:#0057A8}.card.cellcom,.dot.cellcom{background:#9C27B0}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-left:6px}
+#map{height:380px;border-radius:14px;border:1px solid #e3e9f0;z-index:0}
+.note,.source{font-size:.82rem;color:#555}
+.source{margin-top:32px;padding-top:14px;border-top:1px solid #e8edf3}
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+th,td{text-align:right;padding:8px 10px;border-bottom:1px solid #edf1f5}
+th{background:#f3f6fa;font-weight:700;color:#1a1a2e;position:sticky;top:0}
+.tablewrap{max-height:520px;overflow:auto;border:1px solid #e3e9f0;border-radius:12px}
+.missing{font-size:.9rem;color:#444;padding-right:20px}
+.lead{background:#f0fafc;border:1px solid #bfe8ef;border-radius:16px;padding:20px;margin-top:32px}
+.lead h2{margin-top:0}
+.lead form{display:grid;gap:6px;max-width:420px}
+.lead label{font-size:.85rem;font-weight:600;margin-top:6px}
+.lead input[type=text],.lead input[type=tel]{font:inherit;padding:11px 14px;border:1px solid #cfd8e3;border-radius:10px;width:100%;background:#fff}
+.lead .consent{display:flex;gap:8px;align-items:flex-start;font-weight:400;font-size:.78rem;color:#555;line-height:1.5;cursor:pointer}
+.lead .consent input{margin-top:3px;flex:0 0 auto}
+.lead button{font:inherit;font-weight:700;margin-top:10px;padding:13px;border:0;border-radius:12px;background:#008a9c;color:#fff;cursor:pointer;font-size:1rem}
+.lead button:hover{background:#00727f}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.faq details{border-bottom:1px solid #edf1f5;padding:10px 0}.faq summary{font-weight:600;cursor:pointer}.faq p{margin:8px 0 0;color:#444;font-size:.92rem}
+.near{display:flex;flex-wrap:wrap;gap:8px}
+.near a{background:#f3f6fa;border:1px solid #e3e9f0;border-radius:20px;padding:5px 12px;text-decoration:none;font-size:.88rem;color:#1a1a2e}
+.near a:hover{border-color:#00B4CC}.near a span{color:#667}
+footer{text-align:center;padding:16px 24px;font-size:.78rem;color:#666;background:#fff;border-top:1px solid #e8edf3;max-width:860px;margin:0 auto}
+footer a{color:#666}
+@media(max-width:520px){h1{font-size:1.35rem}.card .num{font-size:1.5rem}#map{height:300px}main{padding:16px 14px 32px}}

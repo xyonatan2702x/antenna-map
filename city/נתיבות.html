@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>אנטנות סלולריות בנתיבות — קליטה של פרטנר, סלקום ופלאפון</title>
+  <meta name="description" content="בנתיבות פועלים 22 אתרי שידור סלולריים: פרטנר 9, פלאפון 8, סלקום 5. מפה, רשימת כתובות ודור 5 לפי חברה, מנתוני המשרד להגנת הסביבה." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://xyonatan2702x.github.io/antenna-map/city/%D7%A0%D7%AA%D7%99%D7%91%D7%95%D7%AA.html" />
+  <meta property="og:title" content="אנטנות סלולריות בנתיבות — קליטה של פרטנר, סלקום ופלאפון" />
+  <meta property="og:description" content="בנתיבות פועלים 22 אתרי שידור סלולריים: פרטנר 9, פלאפון 8, סלקום 5. מפה, רשימת כתובות ודור 5 לפי חברה, מנתוני המשרד להגנת הסביבה." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://xyonatan2702x.github.io/antenna-map/city/%D7%A0%D7%AA%D7%99%D7%91%D7%95%D7%AA.html" />
+  <meta property="og:locale" content="he_IL" />
+  <meta property="og:image" content="https://xyonatan2702x.github.io/antenna-map/og-image.png" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📡</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="city.css?v=1" />
+  <script type="application/ld+json">[{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "מפת אנטנות ישראל", "item": "https://xyonatan2702x.github.io/antenna-map/"}, {"@type": "ListItem", "position": 2, "name": "ערים ויישובים", "item": "https://xyonatan2702x.github.io/antenna-map/city/"}, {"@type": "ListItem", "position": 3, "name": "נתיבות", "item": "https://xyonatan2702x.github.io/antenna-map/city/%D7%A0%D7%AA%D7%99%D7%91%D7%95%D7%AA.html"}]}, {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "כמה אנטנות סלולריות יש בנתיבות?", "acceptedAnswer": {"@type": "Answer", "text": "לפי נתוני המשרד להגנת הסביבה פועלים בנתיבות 22 אתרי שידור: 9 של פרטנר והוט מובייל, 8 של פלאפון, 5 של סלקום."}}, {"@type": "Question", "name": "לאיזו חברה יש הכי הרבה אנטנות בנתיבות?", "acceptedAnswer": {"@type": "Answer", "text": "לחברת פרטנר והוט מובייל יש הכי הרבה אתרי שידור בנתיבות (9). מספר האתרים הוא אינדיקציה בלבד: הקליטה בפועל תלויה גם במרחק מהאתר, בבניין, בקומה ובעומס על הרשת."}}, {"@type": "Question", "name": "יש דור 5 בנתיבות?", "acceptedAnswer": {"@type": "Answer", "text": "ב-10 מתוך 22 האתרים משודר גם דור 5: פרטנר 2, פלאפון 5, סלקום 3. כדי לגלוש בדור 5 צריך גם מכשיר תומך וחבילה שכוללת דור 5."}}]}]</script>
+</head>
+<body>
+<header class="top"><a href="../" class="brand">📡 מפת אנטנות ישראל</a><a href="../" class="back">בדיקה לפי כתובת ←</a></header>
+<main>
+  <nav class="crumbs" aria-label="מיקום באתר"><a href="../">ראשי</a> › <a href="./">ערים ויישובים</a> › <span>נתיבות</span></nav>
+  <h1>אנטנות סלולריות בנתיבות</h1>
+  <p class="lede">בנתיבות פועלים <strong>22 אתרי שידור</strong> סלולריים. לחברת פרטנר והוט מובייל יש הכי הרבה אתרי שידור בנתיבות (9). ב-10 מתוך 22 האתרים משודר גם דור 5: פרטנר 2, פלאפון 5, סלקום 3.</p>
+
+  <div class="cards">
+    <div class="card partner"><div class="num">9</div><div class="lbl">פרטנר</div><div class="sub">2 עם דור 5</div></div><div class="card pelephone"><div class="num">8</div><div class="lbl">פלאפון</div><div class="sub">5 עם דור 5</div></div><div class="card cellcom"><div class="num">5</div><div class="lbl">סלקום</div><div class="sub">3 עם דור 5</div></div>
+  </div>
+
+  <h2>מפת האנטנות בנתיבות</h2>
+  <div id="map" role="img" aria-label="מפת אתרי השידור הסלולריים בנתיבות"></div>
+  <p class="note">לחיצה על נקודה במפה מציגה את הכתובת, החברה והדורות המשודרים. לבדיקה לפי כתובת מדויקת: <a href="../">המפה המלאה</a>.</p>
+
+  <h2>פירוט לפי חברה</h2>
+  <table class="co"><thead><tr><th>חברה</th><th>אתרי שידור</th><th>עם דור 4</th><th>עם דור 5</th></tr></thead><tbody><tr><td><span class="dot partner"></span>פרטנר והוט מובייל</td><td>9</td><td>9</td><td>2</td></tr><tr><td><span class="dot pelephone"></span>פלאפון</td><td>8</td><td>8</td><td>5</td></tr><tr><td><span class="dot cellcom"></span>סלקום</td><td>5</td><td>5</td><td>3</td></tr></tbody></table>
+  
+  <p class="note">פרטנר והוט מובייל משתמשות ברשת משותפת (PHI), ולכן הן מופיעות יחד. מפעילים נוספים משתמשים ברשת של אחת משלוש החברות, וכדאי לבדוק מול המפעיל שלכם על איזו רשת הוא פועל.</p>
+
+  <section class="lead" id="lead-form">
+    <h2>קליטה גרועה בנתיבות?</h2>
+    <p>השאירו פרטים ונבדוק איזו חברה מתאימה לכתובת שלכם. בלי עלות ובלי התחייבות.</p>
+    <form id="city-form">
+      <label for="cf-name">שם</label><input id="cf-name" name="name" type="text" required autocomplete="name" />
+      <label for="cf-phone">טלפון</label><input id="cf-phone" name="phone" type="tel" required dir="ltr" autocomplete="tel" placeholder="050-0000000" />
+      <label for="cf-loc">רחוב / שכונה</label><input id="cf-loc" name="location" type="text" placeholder="לא חובה" />
+      <input type="text" id="cf-website" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" class="hp" />
+      <label class="consent"><input type="checkbox" id="cf-consent" required /> <span>אני מאשר/ת שפרטיי יועברו לנציג או לספק שירות מתאים, שיחזור אליי בטלפון או בוואטסאפ, וקראתי את <a href="../privacy.html" target="_blank" rel="noopener">מדיניות הפרטיות</a> ואת <a href="../terms.html" target="_blank" rel="noopener">תנאי השימוש</a></span></label>
+      <button type="submit">שלח — נבדוק ונחזור אליך ✓</button>
+    </form>
+    <div id="city-thanks" hidden><strong>קיבלנו ✅</strong><p>נחזור אליך בהקדם עם בדיקה לכתובת שלך.</p></div>
+  </section>
+
+  <h2>כל אתרי השידור בנתיבות (22)</h2>
+  <div class="tablewrap"><table class="sites"><thead><tr><th>כתובת</th><th>חברה</th><th>דורות</th></tr></thead><tbody><tr><td>א.ת. חדש. פארק נועם</td><td><span class="dot partner"></span>פרטנר</td><td>2 · 3 · 4</td></tr><tr><td>אזה&quot;ת שדות נגב</td><td><span class="dot cellcom"></span>סלקום</td><td>2 · 3 · 4 · 5</td></tr><tr><td>במגרש חניה ליד תחנת רכבת נתיבות</td><td><span class="dot cellcom"></span>סלקום</td><td>3 · 4</td></tr><tr><td>בסמוך לפסי רכבת צפון מערבית לנתיבות</td><td><span class="dot cellcom"></span>סלקום</td><td>3 · 4 · 5</td></tr><tr><td>בשטח א.ת שדות נגב סמוך לנתיבות</td><td><span class="dot pelephone"></span>פלאפון</td><td>3 · 4</td></tr><tr><td>הארי 193</td><td><span class="dot partner"></span>פרטנר</td><td>2 · 4</td></tr><tr><td>הארי 87</td><td><span class="dot pelephone"></span>פלאפון</td><td>3 · 4</td></tr><tr><td>היובל 15 נתיבות</td><td><span class="dot partner"></span>פרטנר</td><td>3 · 4</td></tr><tr><td>חוות יזרעם</td><td><span class="dot pelephone"></span>פלאפון</td><td>4 · 5</td></tr><tr><td>חניון תחנת רכבת נתיבות</td><td><span class="dot pelephone"></span>פלאפון</td><td>3 · 4 · 5</td></tr><tr><td>יובל 15</td><td><span class="dot pelephone"></span>פלאפון</td><td>3 · 4 · 5</td></tr><tr><td>יזרעם</td><td><span class="dot partner"></span>פרטנר</td><td>2 · 3 · 4</td></tr><tr><td>ממגורות  ``משקי הנגב `` א.ת נתיבות</td><td><span class="dot pelephone"></span>פלאפון</td><td>3 · 4 · 5</td></tr><tr><td>מרכז נתיבות</td><td><span class="dot partner"></span>פרטנר</td><td>2 · 3 · 4 · 5</td></tr><tr><td>נתיבות מגרש החניה של הרכבת</td><td><span class="dot partner"></span>פרטנר</td><td>3 · 4</td></tr><tr><td>נתיבות שטח פתוח בית הגדי</td><td><span class="dot partner"></span>פרטנר</td><td>2 · 3 · 4</td></tr><tr><td>צומת נתיבות</td><td><span class="dot pelephone"></span>פלאפון</td><td>3 · 4 · 5</td></tr><tr><td>רח` היובל 15</td><td><span class="dot cellcom"></span>סלקום</td><td>2 · 3 · 4</td></tr><tr><td>רח` היוגב 7</td><td><span class="dot cellcom"></span>סלקום</td><td>4 · 5</td></tr><tr><td>רחוב היוגב 7 נתיבות</td><td><span class="dot partner"></span>פרטנר</td><td>2 · 3 · 4 · 5</td></tr><tr><td>שדרות ירושלים</td><td><span class="dot pelephone"></span>פלאפון</td><td>3 · 4</td></tr><tr><td>שדרות ירושלים 1</td><td><span class="dot partner"></span>פרטנר</td><td>3 · 4</td></tr></tbody></table></div>
+
+  <h2>שאלות נפוצות</h2>
+  <div class="faq"><details><summary>כמה אנטנות סלולריות יש בנתיבות?</summary><p>לפי נתוני המשרד להגנת הסביבה פועלים בנתיבות 22 אתרי שידור: 9 של פרטנר והוט מובייל, 8 של פלאפון, 5 של סלקום.</p></details><details><summary>לאיזו חברה יש הכי הרבה אנטנות בנתיבות?</summary><p>לחברת פרטנר והוט מובייל יש הכי הרבה אתרי שידור בנתיבות (9). מספר האתרים הוא אינדיקציה בלבד: הקליטה בפועל תלויה גם במרחק מהאתר, בבניין, בקומה ובעומס על הרשת.</p></details><details><summary>יש דור 5 בנתיבות?</summary><p>ב-10 מתוך 22 האתרים משודר גם דור 5: פרטנר 2, פלאפון 5, סלקום 3. כדי לגלוש בדור 5 צריך גם מכשיר תומך וחבילה שכוללת דור 5.</p></details></div>
+
+  <h2>יישובים סמוכים</h2>
+  <div class="near"><a href="%D7%91%D7%99%D7%AA-%D7%94%D7%92%D7%93%D7%99.html">בית הגדי <span>(3)</span></a><a href="%D7%99%D7%9B%D7%99%D7%A0%D7%99.html">יכיני <span>(3)</span></a><a href="%D7%9B%D7%A4%D7%A8-%D7%A2%D7%96%D7%94.html">כפר עזה <span>(3)</span></a><a href="%D7%A2%D7%9C%D7%95%D7%9E%D7%99%D7%9D.html">עלומים <span>(3)</span></a><a href="%D7%91%D7%90%D7%A8%D7%99.html">בארי <span>(4)</span></a><a href="%D7%A0%D7%97%D7%9C-%D7%A2%D7%95%D7%96.html">נחל עוז <span>(3)</span></a><a href="%D7%92%D7%99%D7%9C%D7%AA.html">גילת <span>(3)</span></a><a href="%D7%A0%D7%99%D7%A8-%D7%A2%D7%9D.html">ניר עם <span>(5)</span></a></div>
+
+  <p class="source">מקור הנתונים: מאגר "אנטנות סלולריות פעילות" של המשרד להגנת הסביבה (data.gov.il), עדכון 11/2026. המידע מוצג כפי שהוא ועשוי להשתנות. מספר האתרים אינו מעיד בהכרח על איכות הקליטה בכתובת מסוימת.</p>
+</main>
+<footer><a href="../privacy.html">מדיניות פרטיות</a> · <a href="../terms.html">תנאי שימוש</a> · <a href="../accessibility.html">הצהרת נגישות</a><br/>אתר פרטי ועצמאי. אינו אתר ממשלתי ואינו פועל מטעם חברות הסלולר.</footer>
+<script>window.CITY={"name":"נתיבות","center":[31.42162,34.58607],"sites":[[31.43578,34.55846,"partner","יזרעם","2 3 4"],[31.41471,34.59158,"partner","מרכז נתיבות","2 3 4 5"],[31.42301,34.583,"pelephone","הארי 87","3 4"],[31.41865,34.58607,"pelephone","שדרות ירושלים","3 4"],[31.41471,34.59159,"cellcom","אזה\"ת שדות נגב","2 3 4 5"],[31.41099,34.57376,"pelephone","חניון תחנת רכבת נתיבות","3 4 5"],[31.43578,34.55846,"pelephone","חוות יזרעם","4 5"],[31.42167,34.57471,"pelephone","יובל 15","3 4 5"],[31.42303,34.58297,"partner","הארי 193","2 4"],[31.41438,34.59127,"pelephone","בשטח א.ת שדות נגב סמוך לנתיבות","3 4"],[31.42162,34.57485,"cellcom","רח` היובל 15","2 3 4"],[31.42081,34.60317,"partner","רחוב היוגב 7 נתיבות","2 3 4 5"],[31.42081,34.60317,"cellcom","רח` היוגב 7","4 5"],[31.43565,34.58937,"partner","נתיבות שטח פתוח בית הגדי","2 3 4"],[31.41805,34.6005,"pelephone","ממגורות  ``משקי הנגב `` א.ת נתיבות","3 4 5"],[31.41403,34.61121,"partner","א.ת. חדש. פארק נועם","2 3 4"],[31.43581,34.55847,"cellcom","בסמוך לפסי רכבת צפון מערבית לנתיבות","3 4 5"],[31.4245,34.60103,"partner","שדרות ירושלים 1","3 4"],[31.41099,34.57376,"partner","נתיבות מגרש החניה של הרכבת","3 4"],[31.4248,34.60209,"pelephone","צומת נתיבות","3 4 5"],[31.42163,34.57489,"partner","היובל 15 נתיבות","3 4"],[31.41099,34.57376,"cellcom","במגרש חניה ליד תחנת רכבת נתיבות","3 4"]]};</script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
+<script src="city.js?v=1" defer></script>
+</body>
+</html>

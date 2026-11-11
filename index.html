@@ -858,11 +858,12 @@ function latLonToITM(lat,lon){return proj4('WGS84','ITM',[lon,lat])}
 // ══════════════════════════════════════════
 //  MAP
 // ══════════════════════════════════════════
-const map=L.map('map',{zoomControl:true,attributionControl:false}).setView([31.8,34.9],10);
+const map=L.map('map',{zoomControl:true}).setView([31.8,34.9],10);
+map.attributionControl.setPrefix(false);
 
-// Google Maps tiles
-L.tileLayer('https://mt{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}&hl=he&gl=IL',{
-  subdomains:['0','1','2','3'],maxZoom:21
+// OpenStreetMap tiles (with the attribution their license requires)
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+  maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
 
 // Panes
@@ -1239,6 +1240,10 @@ function togglePost(btn) {
 
 loadAllData();
 </script>
+<section style="background:#fff;padding:28px 24px;border-top:1px solid #e8edf3"><div style="max-width:700px;margin:0 auto">
+<h2 style="font-size:1.1rem;font-weight:700;color:#1a1a2e;margin-bottom:12px">אנטנות סלולריות לפי עיר</h2>
+<div style="display:flex;flex-wrap:wrap;gap:8px"><a href="city/%D7%AA%D7%9C-%D7%90%D7%91%D7%99%D7%91.html" style="background:#f3f6fa;border:1px solid #e3e9f0;border-radius:20px;padding:5px 12px;text-decoration:none;font-size:0.88rem;color:#1a1a2e">תל אביב</a><a href="city/%D7%99%D7%A8%D7%95%D7%A9%D7%9C%D7%99%D7%9D.html" style="background:#f3f6fa;border:1px solid #e3e9f0;border-radius:20px;padding:5px 12px;text-decoration:none;font-size:0.88rem;color:#1a1a2e">ירושלים</a><a href="city/%D7%97%D7%99%D7%A4%D7%94.html" style="background:#f3f6fa;border:1px solid #e3e9f0;border-radius:20px;padding:5px 12px;text-decoration:none;font-size:0.88rem;color:#1a1a2e">חיפה</a><a href="city/%D7%A4%D7%AA%D7%97-%D7%AA%D7%A7%D7%95%D7%95%D7%94.html" style="background:#f3f6fa;border:1px solid #e3e9f0;border-radius:20px;padding:5px 12px;text-decoration:none;font-size:0.88rem;color:#1a1a2e">פתח תקווה</a><a href="city/%D7%A8%D7%90%D7%A9%D7%95%D7%9F-%D7%9C%D7%A6%D7%99%D7%95%D7%9F.html" style="background:#f3f6fa;border:1px solid #e3e9f0;border-radius:20px;padding:5px 12px;text-decoration:none;font-size:0.88rem;color:#1a1a2e">ראשון לציון</a><a href="city/%D7%91%D7%90%D7%A8-%D7%A9%D7%91%D7%A2.html" style="background:#f3f6fa;border:1px solid #e3e9f0;border-radius:20px;padding:5px 12px;text-decoration:none;font-size:0.88rem;color:#1a1a2e">באר שבע</a><a href="city/%D7%A8%D7%9E%D7%AA-%D7%92%D7%9F.html" style="background:#f3f6fa;border:1px solid #e3e9f0;border-radius:20px;padding:5px 12px;text-decoration:none;font-size:0.88rem;color:#1a1a2e">רמת גן</a><a href="city/%D7%97%D7%95%D7%9C%D7%95%D7%9F.html" style="background:#f3f6fa;border:1px solid #e3e9f0;border-radius:20px;padding:5px 12px;text-decoration:none;font-size:0.88rem;color:#1a1a2e">חולון</a><a href="city/%D7%A0%D7%AA%D7%A0%D7%99%D7%94.html" style="background:#f3f6fa;border:1px solid #e3e9f0;border-radius:20px;padding:5px 12px;text-decoration:none;font-size:0.88rem;color:#1a1a2e">נתניה</a><a href="city/%D7%94%D7%A8%D7%A6%D7%9C%D7%99%D7%94.html" style="background:#f3f6fa;border:1px solid #e3e9f0;border-radius:20px;padding:5px 12px;text-decoration:none;font-size:0.88rem;color:#1a1a2e">הרצליה</a><a href="city/%D7%91%D7%A0%D7%99-%D7%91%D7%A8%D7%A7.html" style="background:#f3f6fa;border:1px solid #e3e9f0;border-radius:20px;padding:5px 12px;text-decoration:none;font-size:0.88rem;color:#1a1a2e">בני ברק</a><a href="city/%D7%90%D7%99%D7%9C%D7%AA.html" style="background:#f3f6fa;border:1px solid #e3e9f0;border-radius:20px;padding:5px 12px;text-decoration:none;font-size:0.88rem;color:#1a1a2e">אילת</a><a href="city/%D7%90%D7%A9%D7%93%D7%95%D7%93.html" style="background:#f3f6fa;border:1px solid #e3e9f0;border-radius:20px;padding:5px 12px;text-decoration:none;font-size:0.88rem;color:#1a1a2e">אשדוד</a><a href="city/%D7%90%D7%A9%D7%A7%D7%9C%D7%95%D7%9F.html" style="background:#f3f6fa;border:1px solid #e3e9f0;border-radius:20px;padding:5px 12px;text-decoration:none;font-size:0.88rem;color:#1a1a2e">אשקלון</a><a href="city/%D7%A8%D7%97%D7%95%D7%91%D7%95%D7%AA.html" style="background:#f3f6fa;border:1px solid #e3e9f0;border-radius:20px;padding:5px 12px;text-decoration:none;font-size:0.88rem;color:#1a1a2e">רחובות</a><a href="city/%D7%A8%D7%A2%D7%A0%D7%A0%D7%94.html" style="background:#f3f6fa;border:1px solid #e3e9f0;border-radius:20px;padding:5px 12px;text-decoration:none;font-size:0.88rem;color:#1a1a2e">רעננה</a><a href="city/%D7%9B%D7%A4%D7%A8-%D7%A1%D7%91%D7%90.html" style="background:#f3f6fa;border:1px solid #e3e9f0;border-radius:20px;padding:5px 12px;text-decoration:none;font-size:0.88rem;color:#1a1a2e">כפר סבא</a><a href="city/%D7%9C%D7%95%D7%93.html" style="background:#f3f6fa;border:1px solid #e3e9f0;border-radius:20px;padding:5px 12px;text-decoration:none;font-size:0.88rem;color:#1a1a2e">לוד</a><a href="city/" style="background:#008a9c;border-radius:20px;padding:5px 14px;text-decoration:none;font-size:0.88rem;color:#fff;font-weight:600">כל 522 היישובים ←</a></div>
+</div></section>
 <footer style="text-align:center;padding:14px 24px;font-size:0.78rem;color:#888;background:#fff;border-top:1px solid #e8edf3"><a href="privacy.html" style="color:#666">מדיניות פרטיות</a> · <a href="terms.html" style="color:#666">תנאי שימוש</a> · <a href="accessibility.html" style="color:#666">הצהרת נגישות</a><br/>אתר פרטי ועצמאי. אינו אתר ממשלתי ואינו פועל מטעם חברות הסלולר.</footer>
 </body>
 </html>

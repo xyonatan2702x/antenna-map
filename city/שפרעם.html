@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>אנטנות סלולריות בשפרעם — קליטה של פרטנר, סלקום ופלאפון</title>
+  <meta name="description" content="בשפרעם פועלים 11 אתרי שידור סלולריים: פרטנר 4, פלאפון 3, סלקום 4. מפה, רשימת כתובות ודור 5 לפי חברה, מנתוני המשרד להגנת הסביבה." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://xyonatan2702x.github.io/antenna-map/city/%D7%A9%D7%A4%D7%A8%D7%A2%D7%9D.html" />
+  <meta property="og:title" content="אנטנות סלולריות בשפרעם — קליטה של פרטנר, סלקום ופלאפון" />
+  <meta property="og:description" content="בשפרעם פועלים 11 אתרי שידור סלולריים: פרטנר 4, פלאפון 3, סלקום 4. מפה, רשימת כתובות ודור 5 לפי חברה, מנתוני המשרד להגנת הסביבה." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://xyonatan2702x.github.io/antenna-map/city/%D7%A9%D7%A4%D7%A8%D7%A2%D7%9D.html" />
+  <meta property="og:locale" content="he_IL" />
+  <meta property="og:image" content="https://xyonatan2702x.github.io/antenna-map/og-image.png" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📡</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="city.css?v=1" />
+  <script type="application/ld+json">[{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "מפת אנטנות ישראל", "item": "https://xyonatan2702x.github.io/antenna-map/"}, {"@type": "ListItem", "position": 2, "name": "ערים ויישובים", "item": "https://xyonatan2702x.github.io/antenna-map/city/"}, {"@type": "ListItem", "position": 3, "name": "שפרעם", "item": "https://xyonatan2702x.github.io/antenna-map/city/%D7%A9%D7%A4%D7%A8%D7%A2%D7%9D.html"}]}, {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "כמה אנטנות סלולריות יש בשפרעם?", "acceptedAnswer": {"@type": "Answer", "text": "לפי נתוני המשרד להגנת הסביבה פועלים בשפרעם 11 אתרי שידור: 4 של פרטנר והוט מובייל, 3 של פלאפון, 4 של סלקום."}}, {"@type": "Question", "name": "לאיזו חברה יש הכי הרבה אנטנות בשפרעם?", "acceptedAnswer": {"@type": "Answer", "text": "פרטנר והוט מובייל וסלקום מובילות בשפרעם עם 4 אתרי שידור כל אחת. מספר האתרים הוא אינדיקציה בלבד: הקליטה בפועל תלויה גם במרחק מהאתר, בבניין, בקומה ובעומס על הרשת."}}, {"@type": "Question", "name": "יש דור 5 בשפרעם?", "acceptedAnswer": {"@type": "Answer", "text": "ב-9 מתוך 11 האתרים משודר גם דור 5: פרטנר 3, פלאפון 3, סלקום 3. כדי לגלוש בדור 5 צריך גם מכשיר תומך וחבילה שכוללת דור 5."}}]}]</script>
+</head>
+<body>
+<header class="top"><a href="../" class="brand">📡 מפת אנטנות ישראל</a><a href="../" class="back">בדיקה לפי כתובת ←</a></header>
+<main>
+  <nav class="crumbs" aria-label="מיקום באתר"><a href="../">ראשי</a> › <a href="./">ערים ויישובים</a> › <span>שפרעם</span></nav>
+  <h1>אנטנות סלולריות בשפרעם</h1>
+  <p class="lede">בשפרעם פועלים <strong>11 אתרי שידור</strong> סלולריים. פרטנר והוט מובייל וסלקום מובילות בשפרעם עם 4 אתרי שידור כל אחת. ב-9 מתוך 11 האתרים משודר גם דור 5: פרטנר 3, פלאפון 3, סלקום 3.</p>
+
+  <div class="cards">
+    <div class="card partner"><div class="num">4</div><div class="lbl">פרטנר</div><div class="sub">3 עם דור 5</div></div><div class="card pelephone"><div class="num">3</div><div class="lbl">פלאפון</div><div class="sub">3 עם דור 5</div></div><div class="card cellcom"><div class="num">4</div><div class="lbl">סלקום</div><div class="sub">3 עם דור 5</div></div>
+  </div>
+
+  <h2>מפת האנטנות בשפרעם</h2>
+  <div id="map" role="img" aria-label="מפת אתרי השידור הסלולריים בשפרעם"></div>
+  <p class="note">לחיצה על נקודה במפה מציגה את הכתובת, החברה והדורות המשודרים. לבדיקה לפי כתובת מדויקת: <a href="../">המפה המלאה</a>.</p>
+
+  <h2>פירוט לפי חברה</h2>
+  <table class="co"><thead><tr><th>חברה</th><th>אתרי שידור</th><th>עם דור 4</th><th>עם דור 5</th></tr></thead><tbody><tr><td><span class="dot partner"></span>פרטנר והוט מובייל</td><td>4</td><td>4</td><td>3</td></tr><tr><td><span class="dot pelephone"></span>פלאפון</td><td>3</td><td>3</td><td>3</td></tr><tr><td><span class="dot cellcom"></span>סלקום</td><td>4</td><td>4</td><td>3</td></tr></tbody></table>
+  
+  <p class="note">פרטנר והוט מובייל משתמשות ברשת משותפת (PHI), ולכן הן מופיעות יחד. מפעילים נוספים משתמשים ברשת של אחת משלוש החברות, וכדאי לבדוק מול המפעיל שלכם על איזו רשת הוא פועל.</p>
+
+  <section class="lead" id="lead-form">
+    <h2>קליטה גרועה בשפרעם?</h2>
+    <p>השאירו פרטים ונבדוק איזו חברה מתאימה לכתובת שלכם. בלי עלות ובלי התחייבות.</p>
+    <form id="city-form">
+      <label for="cf-name">שם</label><input id="cf-name" name="name" type="text" required autocomplete="name" />
+      <label for="cf-phone">טלפון</label><input id="cf-phone" name="phone" type="tel" required dir="ltr" autocomplete="tel" placeholder="050-0000000" />
+      <label for="cf-loc">רחוב / שכונה</label><input id="cf-loc" name="location" type="text" placeholder="לא חובה" />
+      <input type="text" id="cf-website" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" class="hp" />
+      <label class="consent"><input type="checkbox" id="cf-consent" required /> <span>אני מאשר/ת שפרטיי יועברו לנציג או לספק שירות מתאים, שיחזור אליי בטלפון או בוואטסאפ, וקראתי את <a href="../privacy.html" target="_blank" rel="noopener">מדיניות הפרטיות</a> ואת <a href="../terms.html" target="_blank" rel="noopener">תנאי השימוש</a></span></label>
+      <button type="submit">שלח — נבדוק ונחזור אליך ✓</button>
+    </form>
+    <div id="city-thanks" hidden><strong>קיבלנו ✅</strong><p>נחזור אליך בהקדם עם בדיקה לכתובת שלך.</p></div>
+  </section>
+
+  <h2>כל אתרי השידור בשפרעם (11)</h2>
+  <div class="tablewrap"><table class="sites"><thead><tr><th>כתובת</th><th>חברה</th><th>דורות</th></tr></thead><tbody><tr><td>אזור תעשיה</td><td><span class="dot partner"></span>פרטנר</td><td>2 · 3 · 4 · 5</td></tr><tr><td>בכניסה המזרחית לשפרעם</td><td><span class="dot pelephone"></span>פלאפון</td><td>3 · 4 · 5</td></tr><tr><td>גני שפרעם צפונית לצומת סומך</td><td><span class="dot cellcom"></span>סלקום</td><td>2 · 3 · 4 · 5</td></tr><tr><td>הבית הפרטי</td><td><span class="dot partner"></span>פרטנר</td><td>2 · 3 · 4</td></tr><tr><td>ליד כיכר העיריה</td><td><span class="dot pelephone"></span>פלאפון</td><td>3 · 4 · 5</td></tr><tr><td>עמוד ח&quot;ח ליד הכניסה דרומית לשפרעם</td><td><span class="dot cellcom"></span>סלקום</td><td>2 · 3 · 4 · 5</td></tr><tr><td>צומת סומך</td><td><span class="dot partner"></span>פרטנר</td><td>2 · 3 · 4 · 5</td></tr><tr><td>צומת סומך</td><td><span class="dot partner"></span>פרטנר</td><td>2 · 3 · 4 · 5</td></tr><tr><td>צומת סומך</td><td><span class="dot pelephone"></span>פלאפון</td><td>3 · 4 · 5</td></tr><tr><td>צפ` לכביש 79מז` לאזה&quot;ת</td><td><span class="dot cellcom"></span>סלקום</td><td>2 · 3 · 4 · 5</td></tr><tr><td>רח` תאופיק זיאד</td><td><span class="dot cellcom"></span>סלקום</td><td>3 · 4</td></tr></tbody></table></div>
+
+  <h2>שאלות נפוצות</h2>
+  <div class="faq"><details><summary>כמה אנטנות סלולריות יש בשפרעם?</summary><p>לפי נתוני המשרד להגנת הסביבה פועלים בשפרעם 11 אתרי שידור: 4 של פרטנר והוט מובייל, 3 של פלאפון, 4 של סלקום.</p></details><details><summary>לאיזו חברה יש הכי הרבה אנטנות בשפרעם?</summary><p>פרטנר והוט מובייל וסלקום מובילות בשפרעם עם 4 אתרי שידור כל אחת. מספר האתרים הוא אינדיקציה בלבד: הקליטה בפועל תלויה גם במרחק מהאתר, בבניין, בקומה ובעומס על הרשת.</p></details><details><summary>יש דור 5 בשפרעם?</summary><p>ב-9 מתוך 11 האתרים משודר גם דור 5: פרטנר 3, פלאפון 3, סלקום 3. כדי לגלוש בדור 5 צריך גם מכשיר תומך וחבילה שכוללת דור 5.</p></details></div>
+
+  <h2>יישובים סמוכים</h2>
+  <div class="near"><a href="%D7%90%D7%A2%D7%91%D7%9C%D7%99%D7%9F.html">אעבלין <span>(6)</span></a><a href="%D7%90%D7%95%D7%A9%D7%94.html">אושה <span>(6)</span></a><a href="%D7%9B%D7%A4%D7%A8-%D7%94%D7%9E%D7%9B%D7%91%D7%99.html">כפר המכבי <span>(6)</span></a><a href="%D7%AA%D7%9E%D7%A8%D7%94.html">תמרה <span>(6)</span></a><a href="%D7%98%D7%9E%D7%A8%D7%94.html">טמרה <span>(6)</span></a><a href="%D7%A7%D7%A8%D7%99%D7%AA-%D7%90%D7%AA%D7%90.html">קרית אתא <span>(34)</span></a><a href="%D7%9B%D7%A4%D7%A8-%D7%9E%D7%A0%D7%93%D7%90.html">כפר מנדא <span>(5)</span></a><a href="%D7%9B%D7%A4%D7%A8-%D7%91%D7%99%D7%90%D7%9C%D7%99%D7%A7.html">כפר ביאליק <span>(3)</span></a></div>
+
+  <p class="source">מקור הנתונים: מאגר "אנטנות סלולריות פעילות" של המשרד להגנת הסביבה (data.gov.il), עדכון 11/2026. המידע מוצג כפי שהוא ועשוי להשתנות. מספר האתרים אינו מעיד בהכרח על איכות הקליטה בכתובת מסוימת.</p>
+</main>
+<footer><a href="../privacy.html">מדיניות פרטיות</a> · <a href="../terms.html">תנאי שימוש</a> · <a href="../accessibility.html">הצהרת נגישות</a><br/>אתר פרטי ועצמאי. אינו אתר ממשלתי ואינו פועל מטעם חברות הסלולר.</footer>
+<script>window.CITY={"name":"שפרעם","center":[32.80365,35.17384],"sites":[[32.79041,35.17481,"cellcom","עמוד ח\"ח ליד הכניסה דרומית לשפרעם","2 3 4 5"],[32.80436,35.14741,"pelephone","צומת סומך","3 4 5"],[32.80394,35.14807,"partner","צומת סומך","2 3 4 5"],[32.80353,35.17385,"pelephone","ליד כיכר העיריה","3 4 5"],[32.81577,35.14987,"cellcom","גני שפרעם צפונית לצומת סומך","2 3 4 5"],[32.79125,35.18465,"partner","אזור תעשיה","2 3 4 5"],[32.79112,35.18471,"pelephone","בכניסה המזרחית לשפרעם","3 4 5"],[32.81433,35.14967,"partner","צומת סומך","2 3 4 5"],[32.80366,35.17384,"cellcom","רח` תאופיק זיאד","3 4"],[32.79119,35.18503,"cellcom","צפ` לכביש 79מז` לאזה\"ת","2 3 4 5"],[32.80365,35.17383,"partner","הבית הפרטי","2 3 4"]]};</script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
+<script src="city.js?v=1" defer></script>
+</body>
+</html>
