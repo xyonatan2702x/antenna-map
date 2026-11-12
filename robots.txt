@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://xyonatan2702x.github.io/antenna-map/sitemap.xml
+Sitemap: https://einklita.co.il/sitemap.xml

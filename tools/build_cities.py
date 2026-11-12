@@ -8,7 +8,7 @@ Change BASE_URL when the site moves to its own domain, then run again.
 import json, re, math, html, collections, datetime, os, shutil
 from urllib.parse import quote
 
-BASE_URL = 'https://xyonatan2702x.github.io/antenna-map/'
+BASE_URL = 'https://einklita.co.il/'
 MIN_SITES = 3            # a city gets a page only with at least this many sites
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TODAY = datetime.date.today().isoformat()
@@ -146,7 +146,7 @@ def page(c, cities_by_key, all_data, pages, updated):
   <script type="application/ld+json">{json.dumps(ld, ensure_ascii=False).replace('</', '<\\/')}</script>
 </head>
 <body>
-<header class="top"><a href="../" class="brand">📡 מפת אנטנות ישראל</a><a href="../" class="back">בדיקה לפי כתובת ←</a></header>
+<header class="top"><a href="../" class="brand">📡 אין קליטה · מפת אנטנות ישראל</a><a href="../" class="back">בדיקה לפי כתובת ←</a></header>
 <main>
   <nav class="crumbs" aria-label="מיקום באתר"><a href="../">ראשי</a> › <a href="./">ערים ויישובים</a> › <span>{E(name)}</span></nav>
   <h1>אנטנות סלולריות ב{E(name)}</h1>
@@ -223,7 +223,7 @@ def index_page(pages, total_sites, updated):
   <link rel="stylesheet" href="city.css?v=2" />
 </head>
 <body>
-<header class="top"><a href="../" class="brand">📡 מפת אנטנות ישראל</a><a href="../" class="back">בדיקה לפי כתובת ←</a></header>
+<header class="top"><a href="../" class="brand">📡 אין קליטה · מפת אנטנות ישראל</a><a href="../" class="back">בדיקה לפי כתובת ←</a></header>
 <main>
   <nav class="crumbs" aria-label="מיקום באתר"><a href="../">ראשי</a> › <span>ערים ויישובים</span></nav>
   <h1>אנטנות סלולריות לפי עיר ויישוב</h1>
