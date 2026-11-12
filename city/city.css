@@ -40,3 +40,8 @@ th{background:#f3f6fa;font-weight:700;color:#1a1a2e;position:sticky;top:0}
 footer{text-align:center;padding:16px 24px;font-size:.78rem;color:#666;background:#fff;border-top:1px solid #e8edf3;max-width:860px;margin:0 auto}
 footer a{color:#666}
 @media(max-width:520px){h1{font-size:1.35rem}.card .num{font-size:1.5rem}#map{height:300px}main{padding:16px 14px 32px}}
+.article p{font-size:1rem;color:#333;margin:0 0 14px}
+.article .cta a{display:inline-block;background:#008a9c;color:#fff;text-decoration:none;font-weight:700;padding:11px 18px;border-radius:12px}
+.gcards{display:grid;gap:12px}
+.gcard{display:grid;gap:4px;background:#fff;border:1px solid #e3e9f0;border-radius:14px;padding:16px 18px;text-decoration:none;color:#1a1a2e}
+.gcard:hover{border-color:#00B4CC}.gcard .ic{font-size:1.4rem}.gcard .ex{font-size:.88rem;color:#555}

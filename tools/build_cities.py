@@ -142,7 +142,7 @@ def page(c, cities_by_key, all_data, pages, updated):
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="city.css?v=1" />
+  <link rel="stylesheet" href="city.css?v=2" />
   <script type="application/ld+json">{json.dumps(ld, ensure_ascii=False).replace('</', '<\\/')}</script>
 </head>
 <body>
@@ -193,7 +193,7 @@ def page(c, cities_by_key, all_data, pages, updated):
 <footer><a href="../privacy.html">מדיניות פרטיות</a> · <a href="../terms.html">תנאי שימוש</a> · <a href="../accessibility.html">הצהרת נגישות</a><br/>אתר פרטי ועצמאי. אינו אתר ממשלתי ואינו פועל מטעם חברות הסלולר.</footer>
 <script>window.CITY={city_json};</script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
-<script src="city.js?v=1" defer></script>
+<script src="city.js?v=2" defer></script>
 </body>
 </html>
 '''
@@ -220,7 +220,7 @@ def index_page(pages, total_sites, updated):
   <link rel="canonical" href="{url}" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📡</text></svg>">
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="city.css?v=1" />
+  <link rel="stylesheet" href="city.css?v=2" />
 </head>
 <body>
 <header class="top"><a href="../" class="brand">📡 מפת אנטנות ישראל</a><a href="../" class="back">בדיקה לפי כתובת ←</a></header>
@@ -235,7 +235,7 @@ def index_page(pages, total_sites, updated):
   <p class="source">מקור הנתונים: מאגר "אנטנות סלולריות פעילות" של המשרד להגנת הסביבה (data.gov.il){', עדכון ' + updated if updated else ''}. מוצגים יישובים שיש בהם {MIN_SITES} אתרי שידור ומעלה. ליישובים קטנים יותר אפשר לבדוק <a href="../">לפי כתובת במפה המלאה</a>.</p>
 </main>
 <footer><a href="../privacy.html">מדיניות פרטיות</a> · <a href="../terms.html">תנאי שימוש</a> · <a href="../accessibility.html">הצהרת נגישות</a><br/>אתר פרטי ועצמאי. אינו אתר ממשלתי ואינו פועל מטעם חברות הסלולר.</footer>
-<script src="city.js?v=1" defer></script>
+<script src="city.js?v=2" defer></script>
 </body>
 </html>
 '''
@@ -243,6 +243,10 @@ def index_page(pages, total_sites, updated):
 def sitemap(pages):
     urls = [(BASE_URL, '1.0', 'monthly'), (BASE_URL + 'city/', '0.8', 'monthly')]
     urls += [(BASE_URL + 'city/' + quote(p['slug']) + '.html', '0.6', 'monthly') for p in sorted(pages, key=lambda p: -len(p['rows']))]
+    gdir = os.path.join(ROOT, 'guide')
+    if os.path.isdir(gdir):
+        urls.append((BASE_URL + 'guide/', '0.7', 'monthly'))
+        urls += [(BASE_URL + 'guide/' + quote(f), '0.7', 'monthly') for f in sorted(os.listdir(gdir)) if f.endswith('.html') and f != 'index.html']
     urls += [(BASE_URL + f, '0.2', 'yearly') for f in ('privacy.html', 'terms.html', 'accessibility.html')]
     body = ''.join(f'  <url>\n    <loc>{u}</loc>\n    <lastmod>{TODAY}</lastmod>\n    <changefreq>{f}</changefreq>\n    <priority>{pr}</priority>\n  </url>\n' for u, pr, f in urls)
     return '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + body + '</urlset>\n'

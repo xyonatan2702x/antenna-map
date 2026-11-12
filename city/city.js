@@ -17,7 +17,7 @@
       try{ref=document.referrer?new URL(document.referrer).hostname:''}catch(e){}
       if(ref===location.hostname)ref='';
       var body=new URLSearchParams({source:CONFIG.LEADS_SOURCE,type:type,
-        page:city?'/city/'+city.name:'/city/',ref:ref,
+        page:city?'/city/'+city.name:(window.PAGE||'/city/'),ref:ref,
         device:window.matchMedia('(max-width: 768px)').matches?'mobile':'desktop'});
       fetch(CONFIG.EVENTS_URL,{method:'POST',mode:'no-cors',body:body,keepalive:true}).catch(function(){});
     }catch(e){}
