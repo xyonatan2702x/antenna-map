@@ -142,7 +142,7 @@ def page(c, cities_by_key, all_data, pages, updated):
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="city.css?v=2" />
+  <link rel="stylesheet" href="city.css?v=3" />
   <script type="application/ld+json">{json.dumps(ld, ensure_ascii=False).replace('</', '<\\/')}</script>
 </head>
 <body>
@@ -220,7 +220,7 @@ def index_page(pages, total_sites, updated):
   <link rel="canonical" href="{url}" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📡</text></svg>">
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="city.css?v=2" />
+  <link rel="stylesheet" href="city.css?v=3" />
 </head>
 <body>
 <header class="top"><a href="../" class="brand">📡 אין קליטה · מפת אנטנות ישראל</a><a href="../" class="back">בדיקה לפי כתובת ←</a></header>

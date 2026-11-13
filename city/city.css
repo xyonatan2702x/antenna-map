@@ -1,5 +1,6 @@
 *{box-sizing:border-box}
 [hidden]{display:none!important}
+html,body{overflow-x:hidden}
 body{font-family:'Heebo',Arial,sans-serif;color:#222;background:#f7f9fc;margin:0;line-height:1.7}
 a{color:#007a8c}
 .top{background:#1a1a2e;color:#fff;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px}
@@ -23,7 +24,7 @@ th,td{text-align:right;padding:8px 10px;border-bottom:1px solid #edf1f5}
 th{background:#f3f6fa;font-weight:700;color:#1a1a2e;position:sticky;top:0}
 .tablewrap{max-height:520px;overflow:auto;border:1px solid #e3e9f0;border-radius:12px}
 .missing{font-size:.9rem;color:#444;padding-right:20px}
-.lead{background:#f0fafc;border:1px solid #bfe8ef;border-radius:16px;padding:20px;margin-top:32px}
+.lead{position:relative;background:#f0fafc;border:1px solid #bfe8ef;border-radius:16px;padding:20px;margin-top:32px}
 .lead h2{margin-top:0}
 .lead form{display:grid;gap:6px;max-width:420px}
 .lead label{font-size:.85rem;font-weight:600;margin-top:6px}
@@ -32,7 +33,7 @@ th{background:#f3f6fa;font-weight:700;color:#1a1a2e;position:sticky;top:0}
 .lead .consent input{margin-top:3px;flex:0 0 auto}
 .lead button{font:inherit;font-weight:700;margin-top:10px;padding:13px;border:0;border-radius:12px;background:#008a9c;color:#fff;cursor:pointer;font-size:1rem}
 .lead button:hover{background:#00727f}
-.hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.lead .hp,.hp{position:absolute;width:1px!important;height:1px;padding:0!important;border:0!important;opacity:0;pointer-events:none;clip:rect(0 0 0 0);clip-path:inset(50%);overflow:hidden}
 .faq details{border-bottom:1px solid #edf1f5;padding:10px 0}.faq summary{font-weight:600;cursor:pointer}.faq p{margin:8px 0 0;color:#444;font-size:.92rem}
 .near{display:flex;flex-wrap:wrap;gap:8px}
 .near a{background:#f3f6fa;border:1px solid #e3e9f0;border-radius:20px;padding:5px 12px;text-decoration:none;font-size:.88rem;color:#1a1a2e}
