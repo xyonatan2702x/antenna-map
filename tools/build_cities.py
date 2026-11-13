@@ -15,7 +15,18 @@ TODAY = datetime.date.today().isoformat()
 CO = {'partner': 'פרטנר והוט מובייל', 'pelephone': 'פלאפון', 'cellcom': 'סלקום'}
 CO_SHORT = {'partner': 'פרטנר', 'pelephone': 'פלאפון', 'cellcom': 'סלקום'}
 ORDER = ['partner', 'pelephone', 'cellcom']
-ALIASES = {'תלאביביפו': 'תלאביב'}   # normalized key -> normalized key
+# normalized key -> normalized key: different spellings (or an old name) of the same place
+ALIASES = {
+    'תלאביביפו': 'תלאביב', 'באקהאלגרביה': 'בקהאלגרביה', 'יקנעםעילית': 'יוקנעםעילית', 'יוקנעם': 'יוקנעםעילית',
+    'דאליתאלכרמל': 'דליתאלכרמל', 'טירתהכרמל': 'טירתכרמל', 'שהם': 'שוהם', 'קלנסואה': 'קלנסווה',
+    'נצרתעילית': 'נוףהגליל', 'מודיעין': 'מודיעיןמכביםרעות', 'בנימינה': 'בנימינהגבעתעדה', 'תמרה': 'טמרה',
+    'טייבהבמשולש': 'טייבה',
+}
+# keys that are not a place people search for
+EXCLUDE = {'שטחללאשיפוט', 'אתרדרך'}
+# display name when the most common spelling in the data is not the one to show
+DISPLAY = {'נוףהגליל': 'נוף הגליל', 'דליתאלכרמל': 'דאלית אל-כרמל', 'טמרה': 'טמרה', 'בנימינהגבעתעדה': 'בנימינה-גבעת עדה',
+           'בקהאלגרביה': 'באקה אל-גרביה', 'מודיעיןמכביםרעות': 'מודיעין-מכבים-רעות'}
 
 def load():
     t = open(os.path.join(ROOT, 'antennas-data.js'), encoding='utf8').read()
@@ -54,12 +65,14 @@ def group(data):
         if r[4].strip(): groups[key_of(r[4])].append(r)
     cities = []
     for k, rows in groups.items():
+        if k in EXCLUDE: continue
         names = collections.Counter(clean_name(r[4]) for r in rows)
         # most common spelling; on a tie prefer the one with separators (not a glued-together variant)
         name = sorted(names.items(), key=lambda kv: (-kv[1], -len(kv[0])))[0][0]
         if ' ' not in name and '-' not in name:
             spaced = [n for n in names if ' ' in n or '-' in n]
             if spaced: name = sorted(spaced, key=lambda n: -names[n])[0]
+        name = DISPLAY.get(k, name)
         center = (median([r[0] for r in rows]), median([r[1] for r in rows]))
         cities.append({'key': k, 'name': name, 'slug': slug_of(name), 'rows': rows, 'center': center})
     return cities

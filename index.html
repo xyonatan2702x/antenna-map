@@ -942,6 +942,23 @@ function buildPopup(a){
 // ══════════════════════════════════════════
 //  SEARCH
 // ══════════════════════════════════════════
+// אחרי חיפוש: מתאים את התצוגה כך שיראו גם את האנטנה הקרובה של כל חברה, ומציג את המרחקים
+function showNearest(lat,lon,label){
+  const R=6371000,rad=Math.PI/180,best={};
+  for(const r of ANTENNAS_DATA){
+    if(!companyVisible[r[2]])continue;
+    const a=Math.sin((r[0]-lat)*rad/2)**2+Math.cos(lat*rad)*Math.cos(r[0]*rad)*Math.sin((r[1]-lon)*rad/2)**2;
+    const d=R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+    if(!best[r[2]]||d<best[r[2]].d)best[r[2]]={d,lat:r[0],lon:r[1]};
+  }
+  const found=COMPANIES.filter(c=>best[c.key]).sort((x,y)=>best[x.key].d-best[y.key].d);
+  placeLocationPin(lat,lon,label);
+  if(!found.length){map.setView([lat,lon],16);setStatus(`מציג: ${label}`);return}
+  map.fitBounds([[lat,lon],...found.map(c=>[best[c.key].lat,best[c.key].lon])],{padding:[45,45],maxZoom:16});
+  const fmt=d=>d<1000?`${Math.round(d)} מ'`:`${(d/1000).toFixed(1)} ק"מ`;
+  setStatus(`מציג: ${label} · האנטנה הקרובה: ${found.map(c=>`${c.name} ${fmt(best[c.key].d)}`).join(' · ')}`);
+}
+
 async function searchAddress(){
   const address=document.getElementById('address-input').value.trim();
   if(!address)return;
@@ -951,10 +968,8 @@ async function searchAddress(){
     const data=await res.json();
     if(!data.length){setStatus('כתובת לא נמצאה — נסה שוב');return}
     currentCenter={lat:parseFloat(data[0].lat),lon:parseFloat(data[0].lon)};
-    map.setView([currentCenter.lat,currentCenter.lon],16);
     const label=data[0].display_name.split(',').slice(0,2).join(',');
-    placeLocationPin(currentCenter.lat,currentCenter.lon,label);
-    setStatus(`מציג: ${label}`);
+    showNearest(currentCenter.lat,currentCenter.lon,label);
   }catch{setStatus('שגיאה בחיפוש כתובת')}
 }
 
@@ -964,9 +979,7 @@ function useMyLocation(){
   navigator.geolocation.getCurrentPosition(
     p=>{
       currentCenter={lat:p.coords.latitude,lon:p.coords.longitude};
-      map.setView([currentCenter.lat,currentCenter.lon],16);
-      placeLocationPin(currentCenter.lat,currentCenter.lon,'המיקום שלי');
-      setStatus('מציג מיקומך הנוכחי');
+      showNearest(currentCenter.lat,currentCenter.lon,'המיקום שלי');
     },
     ()=>setStatus('לא ניתן לגשת למיקום — הכנס כתובת ידנית')
   );
@@ -1020,9 +1033,7 @@ function renderSuggestions(results){
 function selectSuggestion(lat,lon,name){
   inputEl.value=name;hideSuggestions();
   currentCenter={lat:parseFloat(lat),lon:parseFloat(lon)};
-  map.setView([currentCenter.lat,currentCenter.lon],17);
-  placeLocationPin(currentCenter.lat,currentCenter.lon,name);
-  setStatus(`מציג: ${name}`);
+  showNearest(currentCenter.lat,currentCenter.lon,name);
 }
 
 function hideSuggestions(){suggestionsEl.style.display='none';lastQuery=''}
