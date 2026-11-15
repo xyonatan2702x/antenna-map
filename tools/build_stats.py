@@ -92,7 +92,7 @@ def build(b, pages, data, nat, pop_year, updated):
   <meta property="og:image" content="{BASE}og-image.png" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📡</text></svg>">
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../city/city.css?v=5" />
+  <link rel="stylesheet" href="../city/city.css?v=6" />
   <script type="application/ld+json">{json.dumps(ld, ensure_ascii=False).replace('</', '<\\/')}</script>
 </head>
 <body>

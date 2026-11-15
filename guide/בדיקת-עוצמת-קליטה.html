@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>איך בודקים עוצמת קליטה בטלפון (dBm) ומה המספרים אומרים</title>
+  <meta name="description" content="הפסים במסך הם הערכה גסה. המספר האמיתי נמדד ב-dBm, ואפשר לראות אותו בכל טלפון. הנה איך, ואיזה ערך נחשב טוב." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://einklita.co.il/guide/%D7%91%D7%93%D7%99%D7%A7%D7%AA-%D7%A2%D7%95%D7%A6%D7%9E%D7%AA-%D7%A7%D7%9C%D7%99%D7%98%D7%94.html" />
+  <meta property="og:title" content="איך בודקים עוצמת קליטה בטלפון (dBm) ומה המספרים אומרים" />
+  <meta property="og:description" content="הפסים במסך הם הערכה גסה. המספר האמיתי נמדד ב-dBm, ואפשר לראות אותו בכל טלפון. הנה איך, ואיזה ערך נחשב טוב." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://einklita.co.il/guide/%D7%91%D7%93%D7%99%D7%A7%D7%AA-%D7%A2%D7%95%D7%A6%D7%9E%D7%AA-%D7%A7%D7%9C%D7%99%D7%98%D7%94.html" />
+  <meta property="og:locale" content="he_IL" />
+  <meta property="og:site_name" content="אין קליטה" />
+  <meta property="og:image" content="https://einklita.co.il/og-image.png" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📡</text></svg>">
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../city/city.css?v=6" />
+  <script type="application/ld+json">[{"@context": "https://schema.org", "@type": "Article", "headline": "איך בודקים עוצמת קליטה בטלפון (dBm) ומה המספרים אומרים", "description": "הפסים במסך הם הערכה גסה. המספר האמיתי נמדד ב-dBm, ואפשר לראות אותו בכל טלפון. הנה איך, ואיזה ערך נחשב טוב.", "inLanguage": "he", "datePublished": "2026-11-15", "dateModified": "2026-11-15", "mainEntityOfPage": "https://einklita.co.il/guide/%D7%91%D7%93%D7%99%D7%A7%D7%AA-%D7%A2%D7%95%D7%A6%D7%9E%D7%AA-%D7%A7%D7%9C%D7%99%D7%98%D7%94.html", "image": "https://einklita.co.il/og-image.png", "author": {"@type": "Organization", "name": "אין קליטה", "url": "https://einklita.co.il/"}, "publisher": {"@type": "Organization", "name": "אין קליטה", "url": "https://einklita.co.il/"}}, {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "אין קליטה", "item": "https://einklita.co.il/"}, {"@type": "ListItem", "position": 2, "name": "מדריכים", "item": "https://einklita.co.il/guide/"}, {"@type": "ListItem", "position": 3, "name": "בדיקת עוצמת קליטה", "item": "https://einklita.co.il/guide/%D7%91%D7%93%D7%99%D7%A7%D7%AA-%D7%A2%D7%95%D7%A6%D7%9E%D7%AA-%D7%A7%D7%9C%D7%99%D7%98%D7%94.html"}]}, {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "מה נחשב קליטה טובה ב-dBm?", "acceptedAnswer": {"@type": "Answer", "text": "בדור 4, ערך של ‎-80 dBm ומעלה נחשב מצוין, ‎-80 עד ‎-90 טוב, ‎-90 עד ‎-100 בינוני, ומתחת ל-‎-100 חלש. אלה טווחים מקובלים ולא סף רשמי."}}, {"@type": "Question", "name": "איך רואים dBm באייפון?", "acceptedAnswer": {"@type": "Answer", "text": "מחייגים *3001#12345#* כדי להיכנס למצב הבדיקה, ומחפשים את הערך rsrp במדידות של התא המשרת. מבנה התפריט משתנה בין גרסאות iOS."}}, {"@type": "Question", "name": "איך רואים dBm באנדרואיד?", "acceptedAnswer": {"@type": "Answer", "text": "בהגדרות ← אודות הטלפון ← מצב או מידע על כרטיס SIM ← עוצמת אות. המיקום המדויק משתנה בין יצרנים."}}]}]</script>
+</head>
+<body>
+<header class="top"><a href="../" class="brand">📡 אין קליטה <small>· מפת אנטנות סלולריות</small></a><a href="../" class="back">בדיקה לפי כתובת ←</a></header>
+<main class="article">
+  <nav class="crumbs" aria-label="מיקום באתר"><a href="../">ראשי</a> › <a href="./">מדריכים</a> › <span>בדיקת עוצמת קליטה</span></nav>
+  <h1>איך בודקים עוצמת קליטה בטלפון (dBm) ומה המספרים אומרים</h1>
+  <p class="updated">עודכן: 15.11.2026</p>
+  <p class="lede">הפסים במסך הם הערכה גסה. המספר האמיתי נמדד ב-dBm, ואפשר לראות אותו בכל טלפון. הנה איך, ואיזה ערך נחשב טוב.</p>
+<p>שני טלפונים באותו חדר יכולים להציג מספר פסים שונה לגמרי, כי כל יצרן מתרגם את עוצמת האות לפסים בדרך אחרת. כדי לדעת באמת מה הקליטה, ולהשוות בין חדרים, בין טלפונים או בין חברות, בודקים את עוצמת האות ב-dBm.</p>
+
+<h2>מה זה dBm?</h2>
+<p>dBm היא יחידת מידה לעוצמת האות שהטלפון קולט. המספרים שליליים, וככל שהמספר קרוב יותר לאפס הקליטה חזקה יותר: ‎-80 טוב יותר מ-‎-100. בדור 4 ובדור 5 המדד שמוצג בדרך כלל נקרא RSRP.</p>
+
+<h2>איזה ערך נחשב טוב? (דור 4, RSRP)</h2>
+<ul>
+  <li><strong>‎-80 ומעלה:</strong> קליטה מצוינת.</li>
+  <li><strong>‎-80 עד ‎-90:</strong> טובה.</li>
+  <li><strong>‎-90 עד ‎-100:</strong> בינונית. שיחות עובדות, הגלישה עלולה להאט.</li>
+  <li><strong>‎-100 עד ‎-110:</strong> חלשה. צפו לניתוקים בתוך הבית.</li>
+  <li><strong>מתחת ל-‎-110:</strong> כמעט אין קליטה.</li>
+</ul>
+<p>אלה טווחים מקובלים, לא סף רשמי. מה שחשוב הוא להשוות: באותו מקום, בין חדרים, ובין רשתות.</p>
+
+<h2>איך רואים את המספר באנדרואיד</h2>
+<p>הגדרות ← אודות הטלפון ← מצב (או "מידע על כרטיס SIM") ← עוצמת אות. המספר מוצג ב-dBm, לפעמים לצד ASU. המיקום המדויק משתנה מעט בין יצרנים, ואפשר גם לחפש "עוצמת אות" בתיבת החיפוש של ההגדרות.</p>
+
+<h2>איך רואים את המספר באייפון</h2>
+<p>באייפון אין תצוגה רגילה של dBm. אפשר להיכנס למצב הבדיקה של אפל: מחייגים <span dir="ltr">*3001#12345#*</span> ולוחצים חיוג. בגרסאות החדשות של iOS מחפשים בתפריט את המדידות של התא המשרת (Serving Cell) ואת הערך rsrp. המבנה של התפריט משתנה בין גרסאות.</p>
+
+<h2>איך עושים בדיקה שאפשר להסתמך עליה</h2>
+<ul>
+  <li>מודדים בכמה חדרים, כולל החדר הפנימי ביותר והממ"ד, ורושמים את המספרים.</li>
+  <li>מודדים בכמה שעות שונות. בשעות עומס הקליטה עשויה להשתנות.</li>
+  <li>אם יש בבית טלפונים על רשתות שונות, מודדים את כולם באותו מקום. כך רואים איזו רשת מגיעה הכי טוב לבית.</li>
+  <li>שומרים צילומי מסך. הם עוזרים בתלונה לחברה או למשרד התקשורת.</li>
+</ul>
+<p>יצא מספר נמוך? <a href="../">בדקו במפה</a> איפה אתרי השידור הקרובים של כל רשת, או קראו <a href="אין-קליטה-בבית.html">מה עושים כשאין קליטה בבית</a>.</p>
+  <p class="cta"><a href="../">בדקו את הכתובת שלכם במפת האנטנות ←</a></p>
+
+  <h2>שאלות נפוצות</h2>
+  <div class="faq"><details><summary>מה נחשב קליטה טובה ב-dBm?</summary><p>בדור 4, ערך של ‎-80 dBm ומעלה נחשב מצוין, ‎-80 עד ‎-90 טוב, ‎-90 עד ‎-100 בינוני, ומתחת ל-‎-100 חלש. אלה טווחים מקובלים ולא סף רשמי.</p></details><details><summary>איך רואים dBm באייפון?</summary><p>מחייגים *3001#12345#* כדי להיכנס למצב הבדיקה, ומחפשים את הערך rsrp במדידות של התא המשרת. מבנה התפריט משתנה בין גרסאות iOS.</p></details><details><summary>איך רואים dBm באנדרואיד?</summary><p>בהגדרות ← אודות הטלפון ← מצב או מידע על כרטיס SIM ← עוצמת אות. המיקום המדויק משתנה בין יצרנים.</p></details></div>
+
+  <section class="lead" id="lead-form">
+    <h2>רוצים שנבדוק את הכתובת שלכם?</h2>
+    <p>השאירו פרטים ונבדוק איזו חברה מתאימה לכתובת שלכם. בלי עלות ובלי התחייבות.</p>
+    <form id="city-form">
+      <label for="cf-name">שם</label><input id="cf-name" name="name" type="text" required autocomplete="name" />
+      <label for="cf-phone">טלפון</label><input id="cf-phone" name="phone" type="tel" required dir="ltr" autocomplete="tel" placeholder="050-0000000" />
+      <label for="cf-loc">עיר / שכונה</label><input id="cf-loc" name="location" type="text" required />
+      <input type="text" id="cf-website" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" class="hp" />
+      <label class="consent"><input type="checkbox" id="cf-consent" required /> <span>אני מאשר/ת שפרטיי יועברו לספקי שירות, למשווקים מורשים או לאתרי השוואה בתחום הסלולר, שיחזרו אליי בטלפון, בוואטסאפ או בהודעה, וקראתי את <a href="../privacy.html" target="_blank" rel="noopener">מדיניות הפרטיות</a> ואת <a href="../terms.html" target="_blank" rel="noopener">תנאי השימוש</a></span></label>
+      <button type="submit">שלח — נבדוק ונחזור אליך ✓</button>
+    </form>
+    <div id="city-thanks" hidden><strong>קיבלנו ✅</strong><p>נחזור אליך בהקדם עם בדיקה לכתובת שלך.</p></div>
+  </section>
+
+  <h2>מדריכים נוספים</h2>
+  <div class="near"><a href="%D7%90%D7%99%D7%9F-%D7%A7%D7%9C%D7%99%D7%98%D7%94-%D7%91%D7%91%D7%99%D7%AA.html">אין קליטה בבית — מה עושים</a><a href="%D7%9E%D7%92%D7%91%D7%A8-%D7%A7%D7%9C%D7%99%D7%98%D7%94-%D7%A1%D7%9C%D7%95%D7%9C%D7%A8%D7%99%D7%AA.html">מגבר קליטה סלולרית</a><a href="%D7%A7%D7%9C%D7%99%D7%98%D7%94-%D7%91%D7%9E%D7%9E%D7%93.html">קליטה בממ&quot;ד</a><a href="%D7%A9%D7%99%D7%97%D7%95%D7%AA-wifi.html">שיחות Wi-Fi</a><a href="%D7%A1%D7%92%D7%99%D7%A8%D7%AA-%D7%93%D7%95%D7%A8-3.html">סגירת רשתות דור 2 ו-3</a><a href="%D7%91%D7%93%D7%99%D7%A7%D7%AA-%D7%A7%D7%9C%D7%99%D7%98%D7%94-%D7%9C%D7%A4%D7%99-%D7%9B%D7%AA%D7%95%D7%91%D7%AA.html">בדיקת קליטה לפי כתובת</a><a href="%D7%A0%D7%99%D7%95%D7%93-%D7%9E%D7%A1%D7%A4%D7%A8-%D7%A1%D7%9C%D7%95%D7%9C%D7%A8%D7%99.html">ניוד מספר סלולרי</a><a href="%D7%9E%D7%99-%D7%9E%D7%A4%D7%A2%D7%99%D7%9C-%D7%90%D7%AA-%D7%9E%D7%99.html">מי פועל על איזו רשת</a><a href="%D7%A1%D7%9C%D7%95%D7%9C%D7%A8-%D7%9B%D7%A9%D7%A8-%D7%93%D7%95%D7%A8-4.html">סלולר כשר דור 4</a></div>
+  <h2>בדיקה לפי יישוב</h2>
+  <p class="note">רוצים לראות כמה אנטנות יש לכל חברה אצלכם? <a href="../city/">רשימת כל היישובים</a>, <a href="../stats/">דירוג הערים</a> או <a href="../">חיפוש לפי כתובת במפה</a>.</p>
+</main>
+<footer><a href="../stats/">נתונים ודירוגים</a> · <a href="../privacy.html">מדיניות פרטיות</a> · <a href="../terms.html">תנאי שימוש</a> · <a href="../accessibility.html">הצהרת נגישות</a> · <a href="../contact.html">יצירת קשר</a><br/>אתר פרטי ועצמאי. אינו אתר ממשלתי ואינו פועל מטעם חברות הסלולר.</footer>
+<script>window.PAGE='/guide/בדיקת-עוצמת-קליטה';</script>
+<script src="../city/city.js?v=2" defer></script>
+</body>
+</html>
