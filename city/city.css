@@ -4,7 +4,7 @@ html,body{overflow-x:hidden}
 body{font-family:'Heebo',Arial,sans-serif;color:#222;background:#f7f9fc;margin:0;line-height:1.7}
 a{color:#007a8c}
 .top{background:#1a1a2e;color:#fff;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px}
-.top a{color:#fff;text-decoration:none}.top .brand{font-weight:700}.top .back{font-size:.85rem;background:#00B4CC;padding:6px 14px;border-radius:20px;font-weight:600;white-space:nowrap}
+.top a{color:#fff;text-decoration:none}.top .brand{font-weight:700}.top .brand small{font-weight:400;font-size:.78em;opacity:.8}.top .back{font-size:.85rem;background:#00B4CC;padding:6px 14px;border-radius:20px;font-weight:600;white-space:nowrap}
 main{max-width:860px;margin:0 auto;padding:20px 20px 40px;background:#fff}
 .crumbs{font-size:.8rem;color:#666;margin-bottom:10px}
 h1{font-size:1.6rem;line-height:1.3;margin:0 0 10px;color:#1a1a2e;font-weight:900}
@@ -46,3 +46,5 @@ footer a{color:#666}
 .gcards{display:grid;gap:12px}
 .gcard{display:grid;gap:4px;background:#fff;border:1px solid #e3e9f0;border-radius:14px;padding:16px 18px;text-decoration:none;color:#1a1a2e}
 .gcard:hover{border-color:#00B4CC}.gcard .ic{font-size:1.4rem}.gcard .ex{font-size:.88rem;color:#555}
+
+@media(max-width:480px){.top .brand small{display:none}}

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>יצירת קשר — אין קליטה</title>
+  <meta name="description" content="יצירת קשר עם מפעיל האתר אין קליטה: שאלות, בקשות בנושא פרטיות ומחיקת פרטים, ונגישות." />
+  <link rel="canonical" href="https://einklita.co.il/contact.html" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📡</text></svg>">
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body{font-family:'Heebo',Arial,sans-serif;color:#222;background:#f7f9fc;margin:0;line-height:1.8}
+    main{max-width:700px;margin:0 auto;padding:32px 24px;background:#fff;min-height:100vh;box-sizing:border-box}
+    h1{font-size:1.4rem;color:#1a1a2e;margin:0 0 4px}
+    p,li{font-size:0.92rem;color:#444}
+    a{color:#007a8c}
+    form{display:flex;flex-direction:column;gap:12px;margin-top:18px}
+    label{font-size:0.85rem;font-weight:600;color:#1a1a2e;display:flex;flex-direction:column;gap:4px}
+    input,select,textarea{font-family:inherit;font-size:0.95rem;padding:10px 12px;border:1px solid #cfd8e3;border-radius:8px;background:#fff;color:#222;width:100%;box-sizing:border-box}
+    textarea{min-height:130px;resize:vertical}
+    button{font-family:inherit;font-size:1rem;font-weight:700;padding:12px;border:0;border-radius:8px;background:#00a3b8;color:#fff;cursor:pointer}
+    button:disabled{opacity:.6;cursor:default}
+    .hp{position:absolute;width:1px;height:1px;padding:0;border:0;opacity:0;pointer-events:none;clip:rect(0 0 0 0);clip-path:inset(50%);overflow:hidden}
+    .note{font-size:0.8rem;color:#666}
+    #contact-thanks{background:#e8f8fa;border:1px solid #b6e6ec;border-radius:8px;padding:14px 16px;margin-top:18px}
+    #contact-error{color:#b42318;font-size:0.85rem}
+    [hidden]{display:none!important}
+    nav.legal{margin-top:32px;padding-top:16px;border-top:1px solid #e8edf3;font-size:0.82rem}
+    nav.legal a{margin-left:14px}
+  </style>
+</head>
+<body>
+<main>
+  <p><a href="./">← חזרה לאין קליטה</a></p>
+  <h1>יצירת קשר</h1>
+  <p>שאלה על האתר, בקשה בנושא פרטיות (למשל לעיין בפרטים שלך או למחוק אותם), או בעיית נגישות? כתבו כאן והפנייה תגיע ישירות למפעיל האתר.</p>
+
+  <form id="contact-form" novalidate>
+    <label>נושא
+      <select id="ct-topic" name="topic">
+        <option value="general">כללי</option>
+        <option value="privacy">פרטיות / מחיקת פרטים</option>
+        <option value="accessibility">נגישות</option>
+        <option value="terms">תנאי שימוש</option>
+      </select>
+    </label>
+    <label>שם (לא חובה)
+      <input type="text" id="ct-name" name="name" autocomplete="name" maxlength="80" />
+    </label>
+    <label>איך לחזור אליך (טלפון או אימייל)
+      <input type="text" id="ct-reply" name="reply" autocomplete="email" maxlength="120" />
+    </label>
+    <label>ההודעה
+      <textarea id="ct-message" name="message" maxlength="2000" required></textarea>
+    </label>
+    <input type="text" id="ct-website" name="website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+    <p class="note">בבקשה למחיקת פרטים, ציינו את מספר הטלפון שהשארתם באתר כדי שנוכל למצוא את הפנייה. הפרטים בטופס הזה משמשים רק כדי לטפל בפנייה, לפי <a href="privacy.html">מדיניות הפרטיות</a>.</p>
+    <p id="contact-error" role="alert" hidden></p>
+    <button type="submit" id="ct-submit">שליחה</button>
+  </form>
+  <div id="contact-thanks" role="status" hidden>תודה, הפנייה התקבלה. נחזור אליך בהקדם.</div>
+
+  <nav class="legal" aria-label="מסמכי האתר">
+    <a href="privacy.html">מדיניות פרטיות</a>
+    <a href="terms.html">תנאי שימוש</a>
+    <a href="accessibility.html">הצהרת נגישות</a>
+    <a href="contact.html">יצירת קשר</a>
+  </nav>
+</main>
+<script>
+(function () {
+  var URL = 'https://n8n.49-13-155-101.sslip.io/webhook/site-contact';
+  var form = document.getElementById('contact-form');
+  var err = document.getElementById('contact-error');
+  var btn = document.getElementById('ct-submit');
+  var m = location.search.match(/[?&]topic=(\w+)/);
+  if (m) { var sel = document.getElementById('ct-topic'); for (var i = 0; i < sel.options.length; i++) if (sel.options[i].value === m[1]) sel.value = m[1]; }
+  function v(id) { var el = document.getElementById(id); return el ? el.value.trim() : ''; }
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    err.hidden = true;
+    if (v('ct-message').length < 3) { err.textContent = 'נא לכתוב את ההודעה.'; err.hidden = false; return; }
+    btn.disabled = true;
+    var data = new URLSearchParams({ topic: v('ct-topic'), name: v('ct-name'), reply: v('ct-reply'), message: v('ct-message'), website: v('ct-website'), page_url: location.href });
+    fetch(URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: data.toString() })
+      .then(function () { form.hidden = true; document.getElementById('contact-thanks').hidden = false; })
+      .catch(function () { btn.disabled = false; err.textContent = 'השליחה לא הצליחה. נסו שוב בעוד רגע.'; err.hidden = false; });
+  });
+})();
+</script>
+</body>
+</html>
