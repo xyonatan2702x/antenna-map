@@ -18,7 +18,7 @@ CSS = '../city/city.css?v=6'
 ICON = "<link rel=\"icon\" href=\"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📡</text></svg>\">"
 HEADER = '<header class="top"><a href="../" class="brand">📡 אין קליטה <small>· מפת אנטנות סלולריות</small></a><a href="../" class="back">בדיקה לפי כתובת ←</a></header>'
 FOOTER = ('<footer><a href="../stats/">נתונים ודירוגים</a> · <a href="../privacy.html">מדיניות פרטיות</a> · <a href="../terms.html">תנאי שימוש</a> · '
-          '<a href="../accessibility.html">הצהרת נגישות</a> · <a href="../contact.html">יצירת קשר</a><br/>אתר פרטי ועצמאי. אינו אתר ממשלתי ואינו פועל מטעם חברות הסלולר.</footer>')
+          '<a href="../accessibility.html">הצהרת נגישות</a> · <a href="../about.html">אודות</a> · <a href="../contact.html">יצירת קשר</a><br/>אתר פרטי ועצמאי. אינו אתר ממשלתי ואינו פועל מטעם חברות הסלולר.</footer>')
 LEAD = '''  <section class="lead" id="lead-form">
     <h2>רוצים שנבדוק את הכתובת שלכם?</h2>
     <p>השאירו פרטים ונבדוק איזו חברה מתאימה לכתובת שלכם. בלי עלות ובלי התחייבות.</p>

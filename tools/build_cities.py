@@ -269,7 +269,7 @@ def page(c, cities_by_key, all_data, pages, updated, nat, pop_year):
 
   <p class="source">מקור הנתונים: מאגר "אנטנות סלולריות פעילות" של המשרד להגנת הסביבה (data.gov.il){', עדכון ' + updated if updated else ''}. המידע מוצג כפי שהוא ועשוי להשתנות. מספר האתרים אינו מעיד בהכרח על איכות הקליטה בכתובת מסוימת.</p>
 </main>
-<footer><a href="../stats/">נתונים ודירוגים</a> · <a href="../privacy.html">מדיניות פרטיות</a> · <a href="../terms.html">תנאי שימוש</a> · <a href="../accessibility.html">הצהרת נגישות</a> · <a href="../contact.html">יצירת קשר</a><br/>אתר פרטי ועצמאי. אינו אתר ממשלתי ואינו פועל מטעם חברות הסלולר.</footer>
+<footer><a href="../stats/">נתונים ודירוגים</a> · <a href="../privacy.html">מדיניות פרטיות</a> · <a href="../terms.html">תנאי שימוש</a> · <a href="../accessibility.html">הצהרת נגישות</a> · <a href="../about.html">אודות</a> · <a href="../contact.html">יצירת קשר</a><br/>אתר פרטי ועצמאי. אינו אתר ממשלתי ואינו פועל מטעם חברות הסלולר.</footer>
 <script>window.CITY={city_json};</script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
 <script src="city.js?v=2" defer></script>
@@ -314,7 +314,7 @@ def index_page(pages, total_sites, updated):
   {letters}
   <p class="source">מקור הנתונים: מאגר "אנטנות סלולריות פעילות" של המשרד להגנת הסביבה (data.gov.il){', עדכון ' + updated if updated else ''}. מוצגים יישובים שיש בהם {MIN_SITES} אתרי שידור ומעלה. ליישובים קטנים יותר אפשר לבדוק <a href="../">לפי כתובת במפה המלאה</a>.</p>
 </main>
-<footer><a href="../stats/">נתונים ודירוגים</a> · <a href="../privacy.html">מדיניות פרטיות</a> · <a href="../terms.html">תנאי שימוש</a> · <a href="../accessibility.html">הצהרת נגישות</a> · <a href="../contact.html">יצירת קשר</a><br/>אתר פרטי ועצמאי. אינו אתר ממשלתי ואינו פועל מטעם חברות הסלולר.</footer>
+<footer><a href="../stats/">נתונים ודירוגים</a> · <a href="../privacy.html">מדיניות פרטיות</a> · <a href="../terms.html">תנאי שימוש</a> · <a href="../accessibility.html">הצהרת נגישות</a> · <a href="../about.html">אודות</a> · <a href="../contact.html">יצירת קשר</a><br/>אתר פרטי ועצמאי. אינו אתר ממשלתי ואינו פועל מטעם חברות הסלולר.</footer>
 <script src="city.js?v=2" defer></script>
 </body>
 </html>
@@ -327,6 +327,7 @@ def sitemap(pages):
     if os.path.isdir(gdir):
         urls.append((BASE_URL + 'guide/', '0.7', 'monthly'))
         urls += [(BASE_URL + 'guide/' + quote(f), '0.7', 'monthly') for f in sorted(os.listdir(gdir)) if f.endswith('.html') and f != 'index.html']
+    urls.append((BASE_URL + 'about.html', '0.5', 'yearly'))
     urls += [(BASE_URL + f, '0.2', 'yearly') for f in ('privacy.html', 'terms.html', 'accessibility.html', 'contact.html')]
     body = ''.join(f'  <url>\n    <loc>{u}</loc>\n    <lastmod>{TODAY}</lastmod>\n    <changefreq>{f}</changefreq>\n    <priority>{pr}</priority>\n  </url>\n' for u, pr, f in urls)
     return '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + body + '</urlset>\n'

@@ -136,7 +136,7 @@ def build(b, pages, data, nat, pop_year, updated):
 
   <p class="source">הנתונים מוצגים כפי שהם ועשויים להשתנות. מספר אתרי השידור אינו מעיד בהכרח על איכות הקליטה בכתובת מסוימת. לבדיקה לפי כתובת: <a href="../">המפה המלאה</a>.</p>
 </main>
-<footer><a href="../city/">ערים ויישובים</a> · <a href="../guide/">מדריכים</a> · <a href="../privacy.html">מדיניות פרטיות</a> · <a href="../terms.html">תנאי שימוש</a> · <a href="../accessibility.html">הצהרת נגישות</a> · <a href="../contact.html">יצירת קשר</a><br/>אתר פרטי ועצמאי. אינו אתר ממשלתי ואינו פועל מטעם חברות הסלולר.</footer>
+<footer><a href="../city/">ערים ויישובים</a> · <a href="../guide/">מדריכים</a> · <a href="../privacy.html">מדיניות פרטיות</a> · <a href="../terms.html">תנאי שימוש</a> · <a href="../accessibility.html">הצהרת נגישות</a> · <a href="../about.html">אודות</a> · <a href="../contact.html">יצירת קשר</a><br/>אתר פרטי ועצמאי. אינו אתר ממשלתי ואינו פועל מטעם חברות הסלולר.</footer>
 <script>window.PAGE='/stats/';</script>
 <script src="../city/city.js?v=2" defer></script>
 </body>
