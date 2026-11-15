@@ -5,7 +5,7 @@ Run from the repo root:  python3 tools/build_cities.py
 Outputs: city/<slug>.html, city/index.html, sitemap.xml
 Change BASE_URL when the site moves to its own domain, then run again.
 """
-import json, re, math, html, collections, datetime, os, shutil
+import json, re, math, html, collections, datetime, os, shutil, sys
 from urllib.parse import quote
 
 BASE_URL = 'https://einklita.co.il/'
@@ -21,12 +21,27 @@ ALIASES = {
     'דאליתאלכרמל': 'דליתאלכרמל', 'טירתהכרמל': 'טירתכרמל', 'שהם': 'שוהם', 'קלנסואה': 'קלנסווה',
     'נצרתעילית': 'נוףהגליל', 'מודיעין': 'מודיעיןמכביםרעות', 'בנימינה': 'בנימינהגבעתעדה', 'תמרה': 'טמרה',
     'טייבהבמשולש': 'טייבה',
+    'קדימה': 'קדימהצורן', 'צורן': 'קדימהצורן', 'יהוד': 'יהודמונוסון', 'נווהמונוסון': 'יהודמונוסון',
+    'גבעתעדה': 'בנימינהגבעתעדה', 'מכביםרעות': 'מודיעיןמכביםרעות', 'סכנין': 'סחנין',
+    'משמראילון': 'משמראיילון', 'דיירחנא': 'דירחנא', 'נוהאילן': 'נווהאילן', 'נוהזוהר': 'נווהזוהר', 'נוהירק': 'נווהירק',
+    'נוהימין': 'נווהימין', 'נוהדניאל': 'נווהדניאל', 'נוהאטיב': 'נווהאטיב', 'נצרסירני': 'נצרסרני', 'ביתחירות': 'ביתחרות',
+    'יוקנעםמושבה': 'יקנעםמושבה', 'ביתגן': 'ביתגאן', 'מעייןצבי': 'מעיןצבי', 'גיניגר': 'גניגר', 'אילתהשחר': 'איילתהשחר',
+    'גדידהמכר': 'גדיידהמכר', 'גודיידהמכר': 'גדיידהמכר', 'עותניאל': 'עתניאל', 'עץאפריים': 'עץאפרים', 'איכסאל': 'אכסאל',
+    'שעריתקוה': 'שעריתקווה', 'יבנאל': 'יבניאל', 'בואינהנוגידאת': 'בועיינהנוגידאת', 'נאותהככר': 'נאותהכיכר',
+    'כסייפה': 'כסיפה', 'עיילבון': 'עילבון', 'עארבה': 'עראבה', 'חרפיש': 'חורפיש', 'מעאויה': 'מועאוויה',
+    'ביתןאהרון': 'ביתןאהרן', 'בוקעתא': 'בוקעאתא', 'מצודתיהודה': 'מצדותיהודה', 'קריתספר': 'מודיעיןעילית',
 }
 # keys that are not a place people search for
 EXCLUDE = {'שטחללאשיפוט', 'אתרדרך'}
 # display name when the most common spelling in the data is not the one to show
 DISPLAY = {'נוףהגליל': 'נוף הגליל', 'דליתאלכרמל': 'דאלית אל-כרמל', 'טמרה': 'טמרה', 'בנימינהגבעתעדה': 'בנימינה-גבעת עדה',
-           'בקהאלגרביה': 'באקה אל-גרביה', 'מודיעיןמכביםרעות': 'מודיעין-מכבים-רעות'}
+           'בקהאלגרביה': 'באקה אל-גרביה', 'מודיעיןמכביםרעות': 'מודיעין-מכבים-רעות',
+           'קדימהצורן': 'קדימה-צורן', 'יהודמונוסון': 'יהוד-מונוסון', 'סחנין': "סח'נין", 'גדיידהמכר': "ג'דיידה-מכר"}
+POP_MIN_RANK = 20000     # per-capita ranking only among cities at least this big
+
+def load_population():
+    j = json.load(open(os.path.join(ROOT, 'tools', 'population.json'), encoding='utf8'))
+    return {key_of(k): v for k, v in j['population'].items()}, j['total'], j['year']
 
 def load():
     t = open(os.path.join(ROOT, 'antennas-data.js'), encoding='utf8').read()
@@ -81,10 +96,32 @@ def stats(c):
     by = {k: [r for r in c['rows'] if r[2] == k] for k in ORDER}
     return {k: {'n': len(v), 'g5': sum('5' in gens(r[5]) for r in v), 'g4': sum('4' in gens(r[5]) for r in v)} for k, v in by.items()}
 
+def enrich(pages, data, pop, pop_total):
+    """Adds per-city figures (n, g5, rank, residents, sites per 10,000 residents) and returns national figures."""
+    for c in pages:
+        c['n'] = len(c['rows'])
+        c['g5'] = sum('5' in gens(r[5]) for r in c['rows'])
+        c['pop'] = pop.get(c['key'])
+        c['per10k'] = c['n'] * 10000 / c['pop'] if c['pop'] else None
+    for c in pages:
+        c['rank'] = 1 + sum(o['n'] > c['n'] for o in pages)
+    big = [c for c in pages if c['pop'] and c['pop'] >= POP_MIN_RANK]
+    for c in big:
+        c['rank10k'] = 1 + sum(o['per10k'] > c['per10k'] for o in big)
+    g5 = sum('5' in gens(r[5]) for r in data)
+    return {'n': len(data), 'g5': g5, 'g5_pct': g5 * 100 / len(data), 'per10k': len(data) * 10000 / pop_total,
+            'big': len(big), 'pages': len(pages)}
+
+def pct(a, b):
+    return f'{round(a * 100 / b)}%' if b else '0%'
+
+def f1(x):
+    return f'{x:.1f}'
+
 def plural_sites(n):
     return 'אתר שידור אחד' if n == 1 else f'{n} אתרי שידור'
 
-def page(c, cities_by_key, all_data, pages, updated):
+def page(c, cities_by_key, all_data, pages, updated, nat, pop_year):
     name, st, n = c['name'], stats(c), len(c['rows'])
     g5_total = sum(st[k]['g5'] for k in ORDER)
     present = [k for k in ORDER if st[k]['n']]
@@ -99,7 +136,9 @@ def page(c, cities_by_key, all_data, pages, updated):
     if len(leaders) == 1:
         lead_txt = f'לחברת {CO[leaders[0]]} יש הכי הרבה אתרי שידור ב{name} ({top_n}).'
     else:
-        lead_txt = f'{" ו".join(CO[k] for k in leaders)} מובילות ב{name} עם {top_n} אתרי שידור כל אחת.'
+        joined = ', '.join(CO[k] for k in leaders[:-1]) + ' ו' + CO[leaders[-1]]
+        each = 'אתר שידור אחד' if top_n == 1 else f'{top_n} אתרי שידור'
+        lead_txt = f'ל{joined} יש אותו מספר אתרים ב{name}: {each} לכל אחת.'
     if g5_total:
         g5_txt = f'ב-{g5_total} מתוך {n} האתרים משודר גם דור 5: ' + ', '.join(f'{CO_SHORT[k]} {st[k]["g5"]}' for k in present) + '.'
     else:
@@ -117,6 +156,24 @@ def page(c, cities_by_key, all_data, pages, updated):
         f'<tr><td><span class="dot {k}"></span>{CO[k]}</td><td>{st[k]["n"]}</td><td>{st[k]["g4"]}</td><td>{st[k]["g5"]}</td></tr>' for k in ORDER)
     near = sorted((p for p in pages if p['key'] != c['key']), key=lambda p: dist_km(c['center'], p['center']))[:8]
     near_html = ''.join(f'<a href="{quote(p["slug"])}.html">{E(p["name"])} <span>({len(p["rows"])})</span></a>' for p in near)
+    # figures that are unique to this city: national rank, residents, 5G share, comparison with neighbours
+    facts = [f'לפי מספר אתרי השידור, {name} במקום {c["rank"]} מתוך {nat["pages"]} היישובים שמופיעים באתר.']
+    pop_txt = ''
+    if c['pop']:
+        pop_txt = (f'לפי מפקד האוכלוסין {pop_year} גרים ב{name} {c["pop"]:,} תושבים, כלומר {f1(c["per10k"])} אתרי שידור לכל 10,000 תושבים. '
+                   f'הממוצע הארצי הוא {f1(nat["per10k"])}.')
+        if c.get('rank10k'):
+            pop_txt += f' מבין {nat["big"]} הערים שיש בהן {POP_MIN_RANK // 1000} אלף תושבים ומעלה, {name} במקום {c["rank10k"]} ביחס הזה.'
+        facts.append(pop_txt)
+    if g5_total:
+        facts.append(f'דור 5 משודר ב-{pct(g5_total, n)} מאתרי השידור ב{name}, לעומת {round(nat["g5_pct"])}% בכלל הארץ.')
+    else:
+        facts.append(f'באף אחד מאתרי השידור ב{name} לא משודר דור 5. בכלל הארץ דור 5 משודר ב-{round(nat["g5_pct"])}% מהאתרים.')
+    facts_html = ''.join(f'<li>{E(x)}</li>' for x in facts)
+    cmp_rows = [c] + sorted((p for p in pages if p['key'] != c['key']), key=lambda p: dist_km(c['center'], p['center']))[:5]
+    cmp_html = ''.join(
+        '<tr' + (' class="me"' if p is c else '') + '><td>' + (E(p['name']) if p is c else f'<a href="{quote(p["slug"])}.html">{E(p["name"])}</a>')
+        + f'</td><td>{p["n"]}</td><td>{pct(p["g5"], p["n"])}</td><td>{f1(p["per10k"]) if p["per10k"] else "—"}</td></tr>' for p in cmp_rows)
     faq = [
         (f'כמה אנטנות סלולריות יש ב{name}?',
          f'לפי נתוני המשרד להגנת הסביבה פועלים ב{name} {plural_sites(n)}: ' + ', '.join(f'{st[k]["n"]} של {CO[k]}' for k in ORDER) + '.'),
@@ -124,6 +181,9 @@ def page(c, cities_by_key, all_data, pages, updated):
          lead_txt + ' מספר האתרים הוא אינדיקציה בלבד: הקליטה בפועל תלויה גם במרחק מהאתר, בבניין, בקומה ובעומס על הרשת.'),
         (f'יש דור 5 ב{name}?', g5_txt + ' כדי לגלוש בדור 5 צריך גם מכשיר תומך וחבילה שכוללת דור 5.'),
     ]
+    if pop_txt:
+        faq.append((f'כמה אנטנות יש ב{name} ביחס למספר התושבים?',
+                    pop_txt + ' היחס הזה הוא נתון כללי בלבד: אתרי שידור נבדלים זה מזה בעוצמה ובכיסוי, ואתר אחד יכול לשרת גם יישובים סמוכים.'))
     faq_html = ''.join(f'<details><summary>{E(q)}</summary><p>{E(a)}</p></details>' for q, a in faq)
     ld = [
         {'@context': 'https://schema.org', '@type': 'BreadcrumbList', 'itemListElement': [
@@ -156,7 +216,7 @@ def page(c, cities_by_key, all_data, pages, updated):
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="city.css?v=4" />
+  <link rel="stylesheet" href="city.css?v=5" />
   <script type="application/ld+json">{json.dumps(ld, ensure_ascii=False).replace('</', '<\\/')}</script>
 </head>
 <body>
@@ -178,6 +238,11 @@ def page(c, cities_by_key, all_data, pages, updated):
   <table class="co"><thead><tr><th>חברה</th><th>אתרי שידור</th><th>עם דור 4</th><th>עם דור 5</th></tr></thead><tbody>{table_co}</tbody></table>
   {f'<ul class="missing">{miss_html}</ul>' if miss_html else ''}
   <p class="note">פרטנר והוט מובייל משתמשות ברשת משותפת (PHI), ולכן הן מופיעות יחד. מפעילים נוספים משתמשים ברשת של אחת משלוש החברות, וכדאי לבדוק מול המפעיל שלכם על איזו רשת הוא פועל.</p>
+
+  <h2>{E(name)} במספרים</h2>
+  <ul class="facts">{facts_html}</ul>
+  <div class="tablewrap"><table class="co cmp"><caption>השוואה ליישובים סמוכים</caption><thead><tr><th>יישוב</th><th>אתרי שידור</th><th>עם דור 5</th><th>ל-10,000 תושבים</th></tr></thead><tbody>{cmp_html}</tbody></table></div>
+  <p class="note">מספר התושבים לפי מפקד האוכלוסין {pop_year} של הלמ"ס, ומוצג ליישובים שיש בהם 5,000 תושבים ומעלה. לדירוג הארצי המלא: <a href="../stats/">אנטנות סלולריות בישראל במספרים</a>.</p>
 
   <section class="lead" id="lead-form">
     <h2>קליטה גרועה ב{E(name)}?</h2>
@@ -204,7 +269,7 @@ def page(c, cities_by_key, all_data, pages, updated):
 
   <p class="source">מקור הנתונים: מאגר "אנטנות סלולריות פעילות" של המשרד להגנת הסביבה (data.gov.il){', עדכון ' + updated if updated else ''}. המידע מוצג כפי שהוא ועשוי להשתנות. מספר האתרים אינו מעיד בהכרח על איכות הקליטה בכתובת מסוימת.</p>
 </main>
-<footer><a href="../privacy.html">מדיניות פרטיות</a> · <a href="../terms.html">תנאי שימוש</a> · <a href="../accessibility.html">הצהרת נגישות</a> · <a href="../contact.html">יצירת קשר</a><br/>אתר פרטי ועצמאי. אינו אתר ממשלתי ואינו פועל מטעם חברות הסלולר.</footer>
+<footer><a href="../stats/">נתונים ודירוגים</a> · <a href="../privacy.html">מדיניות פרטיות</a> · <a href="../terms.html">תנאי שימוש</a> · <a href="../accessibility.html">הצהרת נגישות</a> · <a href="../contact.html">יצירת קשר</a><br/>אתר פרטי ועצמאי. אינו אתר ממשלתי ואינו פועל מטעם חברות הסלולר.</footer>
 <script>window.CITY={city_json};</script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
 <script src="city.js?v=2" defer></script>
@@ -234,7 +299,7 @@ def index_page(pages, total_sites, updated):
   <link rel="canonical" href="{url}" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📡</text></svg>">
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="city.css?v=4" />
+  <link rel="stylesheet" href="city.css?v=5" />
 </head>
 <body>
 <header class="top"><a href="../" class="brand">📡 אין קליטה <small>· מפת אנטנות סלולריות</small></a><a href="../" class="back">בדיקה לפי כתובת ←</a></header>
@@ -242,20 +307,21 @@ def index_page(pages, total_sites, updated):
   <nav class="crumbs" aria-label="מיקום באתר"><a href="../">ראשי</a> › <span>ערים ויישובים</span></nav>
   <h1>אנטנות סלולריות לפי עיר ויישוב</h1>
   <p class="lede">{total_sites:,} אתרי שידור סלולריים פעילים בישראל, מחולקים לפי יישוב. בחרו יישוב כדי לראות כמה אתרים יש בו לכל חברה, איפה משודר דור 5, ומפה של האתרים. המספר בסוגריים הוא מספר האתרים ביישוב.</p>
+  <p class="note">רוצים לראות דירוג של הערים לפי מספר האנטנות ביחס לתושבים ולפי דור 5? <a href="../stats/">אנטנות סלולריות בישראל במספרים</a>.</p>
   <h2>הערים הגדולות</h2>
   <div class="near">{top_html}</div>
   <h2>כל היישובים לפי א"ב</h2>
   {letters}
   <p class="source">מקור הנתונים: מאגר "אנטנות סלולריות פעילות" של המשרד להגנת הסביבה (data.gov.il){', עדכון ' + updated if updated else ''}. מוצגים יישובים שיש בהם {MIN_SITES} אתרי שידור ומעלה. ליישובים קטנים יותר אפשר לבדוק <a href="../">לפי כתובת במפה המלאה</a>.</p>
 </main>
-<footer><a href="../privacy.html">מדיניות פרטיות</a> · <a href="../terms.html">תנאי שימוש</a> · <a href="../accessibility.html">הצהרת נגישות</a> · <a href="../contact.html">יצירת קשר</a><br/>אתר פרטי ועצמאי. אינו אתר ממשלתי ואינו פועל מטעם חברות הסלולר.</footer>
+<footer><a href="../stats/">נתונים ודירוגים</a> · <a href="../privacy.html">מדיניות פרטיות</a> · <a href="../terms.html">תנאי שימוש</a> · <a href="../accessibility.html">הצהרת נגישות</a> · <a href="../contact.html">יצירת קשר</a><br/>אתר פרטי ועצמאי. אינו אתר ממשלתי ואינו פועל מטעם חברות הסלולר.</footer>
 <script src="city.js?v=2" defer></script>
 </body>
 </html>
 '''
 
 def sitemap(pages):
-    urls = [(BASE_URL, '1.0', 'monthly'), (BASE_URL + 'city/', '0.8', 'monthly')]
+    urls = [(BASE_URL, '1.0', 'monthly'), (BASE_URL + 'city/', '0.8', 'monthly'), (BASE_URL + 'stats/', '0.8', 'monthly')]
     urls += [(BASE_URL + 'city/' + quote(p['slug']) + '.html', '0.6', 'monthly') for p in sorted(pages, key=lambda p: -len(p['rows']))]
     gdir = os.path.join(ROOT, 'guide')
     if os.path.isdir(gdir):
@@ -276,12 +342,17 @@ def main():
         if f.endswith('.html'): os.remove(os.path.join(out, f))
     os.makedirs(out, exist_ok=True)
     by_key = {c['key']: c for c in cities}
+    pop, pop_total, pop_year = load_population()
+    nat = enrich(pages, data, pop, pop_total)
     for c in pages:
-        open(os.path.join(out, c['slug'] + '.html'), 'w', encoding='utf8').write(page(c, by_key, data, pages, updated))
+        open(os.path.join(out, c['slug'] + '.html'), 'w', encoding='utf8').write(page(c, by_key, data, pages, updated, nat, pop_year))
+    import build_stats
+    build_stats.build(sys.modules[__name__], pages, data, nat, pop_year, updated)
     open(os.path.join(out, 'index.html'), 'w', encoding='utf8').write(index_page(pages, len(data), updated))
     open(os.path.join(ROOT, 'sitemap.xml'), 'w', encoding='utf8').write(sitemap(pages))
     covered = sum(len(p['rows']) for p in pages)
     print(f'{len(pages)} city pages, {covered} of {len(data)} sites covered ({covered * 100 // len(data)}%), data updated {updated}')
 
 if __name__ == '__main__':
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     main()

@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="city.css?v=4" />
+  <link rel="stylesheet" href="city.css?v=5" />
   <script type="application/ld+json">[{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "אין קליטה", "item": "https://einklita.co.il/"}, {"@type": "ListItem", "position": 2, "name": "ערים ויישובים", "item": "https://einklita.co.il/city/"}, {"@type": "ListItem", "position": 3, "name": "בני ציון", "item": "https://einklita.co.il/city/%D7%91%D7%A0%D7%99-%D7%A6%D7%99%D7%95%D7%9F.html"}]}, {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "כמה אנטנות סלולריות יש בבני ציון?", "acceptedAnswer": {"@type": "Answer", "text": "לפי נתוני המשרד להגנת הסביבה פועלים בבני ציון 7 אתרי שידור: 3 של פרטנר והוט מובייל, 2 של פלאפון, 2 של סלקום."}}, {"@type": "Question", "name": "לאיזו חברה יש הכי הרבה אנטנות בבני ציון?", "acceptedAnswer": {"@type": "Answer", "text": "לחברת פרטנר והוט מובייל יש הכי הרבה אתרי שידור בבני ציון (3). מספר האתרים הוא אינדיקציה בלבד: הקליטה בפועל תלויה גם במרחק מהאתר, בבניין, בקומה ובעומס על הרשת."}}, {"@type": "Question", "name": "יש דור 5 בבני ציון?", "acceptedAnswer": {"@type": "Answer", "text": "ב-2 מתוך 7 האתרים משודר גם דור 5: פרטנר 1, פלאפון 1, סלקום 0. כדי לגלוש בדור 5 צריך גם מכשיר תומך וחבילה שכוללת דור 5."}}]}]</script>
 </head>
 <body>
@@ -40,6 +40,11 @@
   <table class="co"><thead><tr><th>חברה</th><th>אתרי שידור</th><th>עם דור 4</th><th>עם דור 5</th></tr></thead><tbody><tr><td><span class="dot partner"></span>פרטנר והוט מובייל</td><td>3</td><td>3</td><td>1</td></tr><tr><td><span class="dot pelephone"></span>פלאפון</td><td>2</td><td>1</td><td>1</td></tr><tr><td><span class="dot cellcom"></span>סלקום</td><td>2</td><td>2</td><td>0</td></tr></tbody></table>
   
   <p class="note">פרטנר והוט מובייל משתמשות ברשת משותפת (PHI), ולכן הן מופיעות יחד. מפעילים נוספים משתמשים ברשת של אחת משלוש החברות, וכדאי לבדוק מול המפעיל שלכם על איזו רשת הוא פועל.</p>
+
+  <h2>בני ציון במספרים</h2>
+  <ul class="facts"><li>לפי מספר אתרי השידור, בני ציון במקום 128 מתוך 516 היישובים שמופיעים באתר.</li><li>דור 5 משודר ב-29% מאתרי השידור בבני ציון, לעומת 46% בכלל הארץ.</li></ul>
+  <div class="tablewrap"><table class="co cmp"><caption>השוואה ליישובים סמוכים</caption><thead><tr><th>יישוב</th><th>אתרי שידור</th><th>עם דור 5</th><th>ל-10,000 תושבים</th></tr></thead><tbody><tr class="me"><td>בני ציון</td><td>7</td><td>29%</td><td>—</td></tr><tr><td><a href="%D7%A8%D7%A2%D7%A0%D7%A0%D7%94.html">רעננה</a></td><td>89</td><td>47%</td><td>11.1</td></tr><tr><td><a href="%D7%92%D7%9F-%D7%97%D7%99%D7%99%D7%9D.html">גן חיים</a></td><td>4</td><td>100%</td><td>—</td></tr><tr><td><a href="%D7%91%D7%A0%D7%99-%D7%93%D7%A8%D7%95%D7%A8.html">בני דרור</a></td><td>4</td><td>100%</td><td>—</td></tr><tr><td><a href="%D7%AA%D7%9C-%D7%9E%D7%95%D7%A0%D7%93.html">תל מונד</a></td><td>8</td><td>38%</td><td>5.7</td></tr><tr><td><a href="%D7%91%D7%99%D7%AA-%D7%91%D7%A8%D7%9C.html">בית ברל</a></td><td>3</td><td>67%</td><td>—</td></tr></tbody></table></div>
+  <p class="note">מספר התושבים לפי מפקד האוכלוסין 2022 של הלמ"ס, ומוצג ליישובים שיש בהם 5,000 תושבים ומעלה. לדירוג הארצי המלא: <a href="../stats/">אנטנות סלולריות בישראל במספרים</a>.</p>
 
   <section class="lead" id="lead-form">
     <h2>קליטה גרועה בבני ציון?</h2>
@@ -66,7 +71,7 @@
 
   <p class="source">מקור הנתונים: מאגר "אנטנות סלולריות פעילות" של המשרד להגנת הסביבה (data.gov.il), עדכון 11/2026. המידע מוצג כפי שהוא ועשוי להשתנות. מספר האתרים אינו מעיד בהכרח על איכות הקליטה בכתובת מסוימת.</p>
 </main>
-<footer><a href="../privacy.html">מדיניות פרטיות</a> · <a href="../terms.html">תנאי שימוש</a> · <a href="../accessibility.html">הצהרת נגישות</a> · <a href="../contact.html">יצירת קשר</a><br/>אתר פרטי ועצמאי. אינו אתר ממשלתי ואינו פועל מטעם חברות הסלולר.</footer>
+<footer><a href="../stats/">נתונים ודירוגים</a> · <a href="../privacy.html">מדיניות פרטיות</a> · <a href="../terms.html">תנאי שימוש</a> · <a href="../accessibility.html">הצהרת נגישות</a> · <a href="../contact.html">יצירת קשר</a><br/>אתר פרטי ועצמאי. אינו אתר ממשלתי ואינו פועל מטעם חברות הסלולר.</footer>
 <script>window.CITY={"name":"בני ציון","center":[32.21986,34.88187],"sites":[[32.215,34.85995,"partner","מושב בני ציון","2 3 4 5"],[32.21986,34.88187,"pelephone","תחנת דלק בכניסה לישוב בני ציון","3 4 5"],[32.21499,34.86006,"cellcom","תורן פרטנר בסמוך לבית העלמין","2 3 4"],[32.22137,34.87317,"partner","רחוב אנשי בראשית 1","3 4"],[32.22662,34.88462,"partner","פרדס יכין חק\"ל","2 3 4"],[32.21989,34.88201,"cellcom","בכניסה לישוב תחנת דלק דור","2 3 4"],[32.21857,34.88228,"pelephone","אנשי בראשית 1 בני ציון","3"]]};</script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
 <script src="city.js?v=2" defer></script>
