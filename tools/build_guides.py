@@ -14,23 +14,13 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, 'guide')
 TODAY = datetime.date.today().isoformat()
 E = html.escape
-CSS = '../city/city.css?v=6'
+CSS = '../city/city.css?v=7'
 ICON = "<link rel=\"icon\" href=\"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📡</text></svg>\">"
 HEADER = '<header class="top"><a href="../" class="brand">📡 אין קליטה <small>· מפת אנטנות סלולריות</small></a><a href="../" class="back">בדיקה לפי כתובת ←</a></header>'
 FOOTER = ('<footer><a href="../stats/">נתונים ודירוגים</a> · <a href="../privacy.html">מדיניות פרטיות</a> · <a href="../terms.html">תנאי שימוש</a> · '
           '<a href="../accessibility.html">הצהרת נגישות</a> · <a href="../about.html">אודות</a> · <a href="../contact.html">יצירת קשר</a><br/>אתר פרטי ועצמאי. אינו אתר ממשלתי ואינו פועל מטעם חברות הסלולר.</footer>')
-LEAD = '''  <section class="lead" id="lead-form">
-    <h2>רוצים שנבדוק את הכתובת שלכם?</h2>
-    <p>השאירו פרטים ונבדוק איזו חברה מתאימה לכתובת שלכם. בלי עלות ובלי התחייבות.</p>
-    <form id="city-form">
-      <label for="cf-name">שם</label><input id="cf-name" name="name" type="text" required autocomplete="name" />
-      <label for="cf-phone">טלפון</label><input id="cf-phone" name="phone" type="tel" required dir="ltr" autocomplete="tel" placeholder="050-0000000" />
-      <label for="cf-loc">עיר / שכונה</label><input id="cf-loc" name="location" type="text" required />
-      <input type="text" id="cf-website" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" class="hp" />
-      <label class="consent"><input type="checkbox" id="cf-consent" required /> <span>אני מאשר/ת שפרטיי יועברו לספקי שירות, למשווקים מורשים או לאתרי השוואה בתחום הסלולר, שיחזרו אליי בטלפון, בוואטסאפ או בהודעה, וקראתי את <a href="../privacy.html" target="_blank" rel="noopener">מדיניות הפרטיות</a> ואת <a href="../terms.html" target="_blank" rel="noopener">תנאי השימוש</a></span></label>
-      <button type="submit">שלח — נבדוק ונחזור אליך ✓</button>
-    </form>
-    <div id="city-thanks" hidden><strong>קיבלנו ✅</strong><p>נחזור אליך בהקדם עם בדיקה לכתובת שלך.</p></div>
+LEAD = '''  <section class="leadq" id="lead-form">
+    <div data-lead-quiz></div>
   </section>'''
 
 
@@ -104,6 +94,7 @@ def page(g):
 {FOOTER}
 <script>window.PAGE='/guide/{g['slug']}';</script>
 <script src="../city/city.js?v=2" defer></script>
+<script src="../quiz.js?v=4" defer></script>
 </body>
 </html>
 '''

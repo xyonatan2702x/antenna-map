@@ -242,6 +242,7 @@
       padding:8px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;min-height:38px;
     }
     #status-text{font-size:0.84rem;color:#777;flex:1}
+    #near-cta{background:#00B4CC;color:#fff;border:0;border-radius:10px;padding:9px 14px;font:inherit;font-size:.86rem;font-weight:700;cursor:pointer;white-space:nowrap}
     #counts{display:none;gap:7px;flex-wrap:wrap}
     .count-pill{padding:2px 10px;border-radius:20px;font-size:0.78rem;font-weight:600}
 
@@ -487,6 +488,7 @@
 <!-- STATUS BAR -->
 <div class="status-bar">
   <span id="status-text">הכנס כתובת כדי לנווט — כל האנטנות כבר על המפה</span>
+  <button type="button" id="near-cta" hidden onclick="openQuizNear()"></button>
   <div id="counts">
     <span class="count-pill" style="background:#e0f7fa;color:#00B4CC" id="count-partner">פרטנר: 0</span>
     <span class="count-pill" style="background:#e3eef8;color:#0057A8" id="count-pelephone">פלאפון: 0</span>
@@ -569,53 +571,10 @@
   </p>
 </section>
 
-<!-- INLINE LEAD FORM -->
-<section id="lead-form" style="background:#f7f9fc;border-top:1px solid #e8edf3;padding:32px 24px;text-align:center">
-  <h2 style="font-size:1.2rem;font-weight:700;color:#1a1a2e;margin-bottom:6px">רוצה לדעת איזו חברה הכי מתאימה לאזור שלך?</h2>
-  <p style="font-size:0.88rem;color:#888;margin-bottom:16px">נבדוק בשבילך ונחזור אליך בהקדם. בלי עלות ובלי התחייבות</p>
-  <form id="inline-lead-form" onsubmit="submitInlineLead(event)" style="max-width:420px;margin:0 auto;text-align:right">
-    <div class="field">
-      <label for="il-name">שם</label>
-      <input type="text" id="il-name" name="name" placeholder="השם שלך" required />
-    </div>
-    <div class="field">
-      <label for="il-phone">טלפון</label>
-      <input type="tel" id="il-phone" name="phone" placeholder="05X-XXXXXXX" dir="ltr" required />
-    </div>
-    <div class="field">
-      <label for="il-city">אזור מגורים</label>
-      <input type="text" id="il-city" name="city" placeholder="עיר / שכונה" required />
-    </div>
-    <input type="text" id="il-website" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;width:1px;height:1px;padding:0;border:0;opacity:0;pointer-events:none;clip:rect(0 0 0 0);clip-path:inset(50%);overflow:hidden" />
-    <label class="consent-row"><input type="checkbox" id="il-consent" name="consent" required /> <span>אני מאשר/ת שפרטיי יועברו לספקי שירות, למשווקים מורשים או לאתרי השוואה בתחום הסלולר, שיחזרו אליי בטלפון, בוואטסאפ או בהודעה, וקראתי את <a href="privacy.html" target="_blank" rel="noopener" style="color:#007a8c">מדיניות הפרטיות</a> ואת <a href="terms.html" target="_blank" rel="noopener" style="color:#007a8c">תנאי השימוש</a></span></label>
-    <button type="submit" class="btn-submit" style="margin-top:8px">שלח — נבדוק ונחזור אליך ✓</button>
-  </form>
-  <div id="thank-you" style="display:none;padding:30px;text-align:center">
-    <div style="font-size:2rem;margin-bottom:8px">🎉</div>
-    <h2 aria-hidden="true" style="font-size:1.2rem;color:#1a1a2e;margin-bottom:8px">קיבלנו!</h2>
-    <p style="font-size:0.9rem;color:#888">נחזור אליך בהקדם עם בדיקה לאזור שלך.</p>
-  </div>
+<!-- LEAD QUIZ (quiz.js) -->
+<section id="lead-form" style="background:#f7f9fc;border-top:1px solid #e8edf3;padding:32px 16px">
+  <div data-lead-quiz></div>
 </section>
-
-<!-- LEAD MODAL -->
-<div class="modal-overlay" id="lead-modal">
-  <div class="modal">
-    <div class="modal-icon">📞</div>
-    <h2>נבדוק מי מכסה אותך הכי טוב</h2>
-    <p class="subtitle" id="modal-subtitle">נשלח לך המלצה אישית לפי האזור שלך — בחינם ובלי התחייבות<br/><strong id="modal-info"></strong></p>
-    <div class="field">
-      <label for="lead-name">שם מלא</label>
-      <input type="text" id="lead-name" placeholder="ישראל ישראלי" />
-    </div>
-    <div class="field">
-      <label for="lead-phone">מספר טלפון</label>
-      <input type="tel" id="lead-phone" placeholder="050-0000000" dir="ltr" />
-    </div>
-    <label class="consent-row"><input type="checkbox" id="lead-consent" /> <span>אני מאשר/ת שפרטיי יועברו לספקי שירות, למשווקים מורשים או לאתרי השוואה בתחום הסלולר, שיחזרו אליי בטלפון, בוואטסאפ או בהודעה, וקראתי את <a href="privacy.html" target="_blank" rel="noopener" style="color:#007a8c">מדיניות הפרטיות</a> ואת <a href="terms.html" target="_blank" rel="noopener" style="color:#007a8c">תנאי השימוש</a></span></label>
-    <button class="btn-submit" onclick="submitLead()">שלח פרטים ✓</button>
-    <button class="btn-cancel" onclick="closeModal()">ביטול</button>
-  </div>
-</div>
 
 <!-- FAQ SECTION -->
 <section id="faq" itemscope itemtype="https://schema.org/FAQPage" style="background:#fff;border-top:1px solid #e8edf3;padding:28px 24px;max-width:700px;margin:0 auto;width:100%">
@@ -731,6 +690,7 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 <script src="antennas-data.js?v=2026-11"></script>
+<script src="quiz.js?v=4" defer></script>
 <script>
 // ══════════════════════════════════════════
 //  CONFIG — ערוך כאן
@@ -943,7 +903,7 @@ function buildPopup(a){
     ${dist}
     <button class="popup-cta" style="background:${a.company.color}"
       onclick="openModal('${label.replace(/'/g,'').replace(/"/g,'״')}','${a.company.name}')">
-      🙋 דבר עם נציג — נסייע לך בחינם
+      רוצה חבילה ב${a.company.name}? קבל הצעה ←
     </button>
   </div>`;
 }
@@ -966,7 +926,12 @@ function showNearest(lat,lon,label){
   map.fitBounds([[lat,lon],...found.map(c=>[best[c.key].lat,best[c.key].lon])],{padding:[45,45],maxZoom:16});
   const fmt=d=>d<1000?`${Math.round(d)} מ'`:`${(d/1000).toFixed(1)} ק"מ`;
   setStatus(`מציג: ${label} · האנטנה הקרובה: ${found.map(c=>`${c.name} ${fmt(best[c.key].d)}`).join(' · ')}`);
+  nearRec={key:found[0].key,city:label};
+  const btn=document.getElementById('near-cta');
+  if(btn){btn.textContent=`קבל הצעה לחבילה ב${found[0].name} ←`;btn.hidden=false;}
 }
+let nearRec=null;
+function openQuizNear(){if(window.LeadQuiz)LeadQuiz.open({rec:nearRec&&nearRec.key,city:nearRec&&nearRec.city})}
 
 async function searchAddress(){
   const address=document.getElementById('address-input').value.trim();
@@ -1054,17 +1019,6 @@ function escQ(s){return s.replace(/'/g,"\\'")}
 // נקה נתוני לידים ישנים מהדפדפן
 localStorage.removeItem('antenna_leads');
 
-function addLead(name,phone,location,consent){
-  const lead={
-    name,phone,location,
-    company:currentLeadCompany,
-    consent:consent?'yes':'no',
-    date:new Date().toLocaleDateString('he-IL',{day:'2-digit',month:'2-digit',year:'2-digit'}),
-    time:new Date().toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'}),
-  };
-  sendToSheets(lead);
-  sendToN8n(lead);
-}
 
 // שליחה ל-n8n כטופס רגיל (בלי preflight), במקביל לגיליון. כשל כאן לא עוצר את הגולש.
 async function sendToN8n(lead,extra){
@@ -1111,58 +1065,10 @@ async function sendToSheets(lead){
 // ══════════════════════════════════════════
 //  MODAL
 // ══════════════════════════════════════════
-let currentLeadCompany='partner';
-
+const NAME_TO_KEY={'פרטנר':'partner','פלאפון':'pelephone','סלקום':'cellcom'};
+// opens the lead quiz (quiz.js); info = the antenna address, companyName = its network
 function openModal(info,companyName){
-  if(companyName==='פלאפון') currentLeadCompany='pelephone';
-  else if(companyName==='סלקום') currentLeadCompany='cellcom';
-  else currentLeadCompany='partner';
-  document.getElementById('modal-info').textContent=info||companyName||'כיסוי סלולרי';
-  document.getElementById('modal-subtitle').innerHTML=
-    `יש <strong>${info||companyName}</strong> באזורך.<br/>השאר פרטים ונציג יחזור אליך.`;
-  document.getElementById('lead-modal').classList.add('open');
-  track('form_open');
-}
-
-function closeModal(){
-  document.getElementById('lead-modal').classList.remove('open');
-  document.getElementById('lead-name').value='';
-  document.getElementById('lead-phone').value='';
-  document.getElementById('lead-consent').checked=false;
-}
-
-function submitLead(){
-  const name=document.getElementById('lead-name').value.trim();
-  const phone=document.getElementById('lead-phone').value.trim();
-  if(!name||!phone){alert('אנא מלא שם וטלפון');return}
-  if(!document.getElementById('lead-consent').checked){alert('כדי שנוכל לחזור אליך, יש לאשר את העברת הפרטים');return}
-  const location=inputEl.value.trim()||'';
-  addLead(name,phone,location,true);
-  track('form_submit');
-  closeModal();
-  setStatus(`✅ פרטים נשלחו! תודה ${name}`);
-}
-
-// ══════════════════════════════════════════
-//  INLINE LEAD FORM
-// ══════════════════════════════════════════
-function submitInlineLead(e){
-  e.preventDefault();
-  const name=document.getElementById('il-name').value.trim();
-  const phone=document.getElementById('il-phone').value.trim();
-  const city=document.getElementById('il-city').value.trim();
-  const val=id=>{const el=document.getElementById(id);return el?el.value.trim():''};
-  const company=val('il-company');
-  const problem=val('il-problem');
-  const consent=document.getElementById('il-consent').checked;
-  const lead={name,phone,location:city,company:company||'unknown',problem,consent:consent?'yes':'no',
-    date:new Date().toLocaleDateString('he-IL',{day:'2-digit',month:'2-digit',year:'2-digit'}),
-    time:new Date().toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'})};
-  sendToSheets(lead);
-  sendToN8n({...lead,company:company||''},{website:val('il-website')});
-  track('form_submit');
-  document.getElementById('inline-lead-form').style.display='none';
-  document.getElementById('thank-you').style.display='block';
+  if(window.LeadQuiz)LeadQuiz.open({rec:NAME_TO_KEY[companyName]||'',city:(nearRec&&nearRec.city)||''});
 }
 
 // ══════════════════════════════════════════

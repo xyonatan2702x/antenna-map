@@ -14,6 +14,16 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TODAY = datetime.date.today().isoformat()
 CO = {'partner': 'פרטנר והוט מובייל', 'pelephone': 'פלאפון', 'cellcom': 'סלקום'}
 CO_SHORT = {'partner': 'פרטנר', 'pelephone': 'פלאפון', 'cellcom': 'סלקום'}
+# companies that run on each network (MVNOs), as listed in the guide "מי פועל על איזו רשת"
+ALSO_ON = {'partner': 'וואלה מובייל, 012 מובייל ו-019 מובייל', 'pelephone': 'רמי לוי תקשורת', 'cellcom': 'גולן טלקום ו-wecom'}
+
+def recommend(st):
+    """The network with the most sites in the place; a tie goes to more 5G sites; a full tie gives ''."""
+    best = sorted(ORDER, key=lambda k: (-st[k]['n'], -st[k]['g5']))
+    a, b = best[0], best[1]
+    if (st[a]['n'], st[a]['g5']) == (st[b]['n'], st[b]['g5']):
+        return ''
+    return a
 ORDER = ['partner', 'pelephone', 'cellcom']
 # normalized key -> normalized key: different spellings (or an old name) of the same place
 ALIASES = {
@@ -174,7 +184,16 @@ def page(c, cities_by_key, all_data, pages, updated, nat, pop_year):
     cmp_html = ''.join(
         '<tr' + (' class="me"' if p is c else '') + '><td>' + (E(p['name']) if p is c else f'<a href="{quote(p["slug"])}.html">{E(p["name"])}</a>')
         + f'</td><td>{p["n"]}</td><td>{pct(p["g5"], p["n"])}</td><td>{f1(p["per10k"]) if p["per10k"] else "—"}</td></tr>' for p in cmp_rows)
+    rec = recommend(st)
+    if rec:
+        rec_txt = (f'לפי מספר אתרי השידור, לרשת {CO[rec]} יש את הנוכחות הגדולה ביותר ב{name}: {plural_sites(st[rec]["n"])}'
+                   + (f', ב-{st[rec]["g5"]} מהם משודר גם דור 5.' if st[rec]['g5'] else ', ולפי הנתונים באף אחד מהם לא משודר דור 5.')
+                   + f' על אותה רשת פועלות גם {ALSO_ON[rec]}, כך שאפשר לקבל את אותה קליטה גם בחבילה של אחת מהן.')
+    else:
+        rec_txt = f'ב{name} אין רשת אחת שבולטת: ' + ', '.join(f'ל{CO[k]} {plural_sites(st[k]["n"])}' for k in ORDER) + '. במקרה כזה הכי חשוב לבדוק את הכתובת המדויקת.'
+    rec_txt2 = 'מספר האתרים הוא אינדיקציה בלבד. הקליטה בפועל תלויה במרחק מהאתר הקרוב, בבניין ובקומה, ולכן לפני מעבר כדאי לבדוק את הכתובת המדויקת במפה ולנסות את הרשת בבית.'
     faq = [
+        (f'איזו חברת סלולר הכי טובה ב{name}?', rec_txt + ' ' + rec_txt2),
         (f'כמה אנטנות סלולריות יש ב{name}?',
          f'לפי נתוני המשרד להגנת הסביבה פועלים ב{name} {plural_sites(n)}: ' + ', '.join(f'{st[k]["n"]} של {CO[k]}' for k in ORDER) + '.'),
         (f'לאיזו חברה יש הכי הרבה אנטנות ב{name}?',
@@ -216,7 +235,7 @@ def page(c, cities_by_key, all_data, pages, updated, nat, pop_year):
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="city.css?v=6" />
+  <link rel="stylesheet" href="city.css?v=7" />
   <script type="application/ld+json">{json.dumps(ld, ensure_ascii=False).replace('</', '<\\/')}</script>
 </head>
 <body>
@@ -225,6 +244,7 @@ def page(c, cities_by_key, all_data, pages, updated, nat, pop_year):
   <nav class="crumbs" aria-label="מיקום באתר"><a href="../">ראשי</a> › <a href="./">ערים ויישובים</a> › <span>{E(name)}</span></nav>
   <h1>אנטנות סלולריות ב{E(name)}</h1>
   <p class="lede">ב{E(name)} פועלים <strong>{plural_sites(n)}</strong> סלולריים. {E(lead_txt)} {E(g5_txt)}</p>
+  <a class="topcta" href="#lead-form">קליטה גרועה ב{E(name)}? {('קבלו הצעה לחבילה ב' + E(CO_SHORT[rec])) if rec else 'קבלו הצעה לחבילה ברשת שקולטת אצלכם'} ←</a>
 
   <div class="cards">
     {''.join(f'<div class="card {k}"><div class="num">{st[k]["n"]}</div><div class="lbl">{CO_SHORT[k]}</div><div class="sub">{st[k]["g5"]} עם דור 5</div></div>' for k in ORDER)}
@@ -244,18 +264,12 @@ def page(c, cities_by_key, all_data, pages, updated, nat, pop_year):
   <div class="tablewrap"><table class="co cmp"><caption>השוואה ליישובים סמוכים</caption><thead><tr><th>יישוב</th><th>אתרי שידור</th><th>עם דור 5</th><th>ל-10,000 תושבים</th></tr></thead><tbody>{cmp_html}</tbody></table></div>
   <p class="note">מספר התושבים לפי מפקד האוכלוסין {pop_year} של הלמ"ס, ומוצג ליישובים שיש בהם 5,000 תושבים ומעלה. לדירוג הארצי המלא: <a href="../stats/">אנטנות סלולריות בישראל במספרים</a>.</p>
 
-  <section class="lead" id="lead-form">
-    <h2>קליטה גרועה ב{E(name)}?</h2>
-    <p>השאירו פרטים ונבדוק איזו חברה מתאימה לכתובת שלכם. בלי עלות ובלי התחייבות.</p>
-    <form id="city-form">
-      <label for="cf-name">שם</label><input id="cf-name" name="name" type="text" required autocomplete="name" />
-      <label for="cf-phone">טלפון</label><input id="cf-phone" name="phone" type="tel" required dir="ltr" autocomplete="tel" placeholder="050-0000000" />
-      <label for="cf-loc">רחוב / שכונה</label><input id="cf-loc" name="location" type="text" placeholder="לא חובה" />
-      <input type="text" id="cf-website" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" class="hp" />
-      <label class="consent"><input type="checkbox" id="cf-consent" required /> <span>אני מאשר/ת שפרטיי יועברו לספקי שירות, למשווקים מורשים או לאתרי השוואה בתחום הסלולר, שיחזרו אליי בטלפון, בוואטסאפ או בהודעה, וקראתי את <a href="../privacy.html" target="_blank" rel="noopener">מדיניות הפרטיות</a> ואת <a href="../terms.html" target="_blank" rel="noopener">תנאי השימוש</a></span></label>
-      <button type="submit">שלח — נבדוק ונחזור אליך ✓</button>
-    </form>
-    <div id="city-thanks" hidden><strong>קיבלנו ✅</strong><p>נחזור אליך בהקדם עם בדיקה לכתובת שלך.</p></div>
+  <h2>איזו חברת סלולר הכי טובה ב{E(name)}?</h2>
+  <p>{E(rec_txt)}</p>
+  <p class="note">{E(rec_txt2)} <a href="../guide/%D7%9E%D7%99-%D7%9E%D7%A4%D7%A2%D7%99%D7%9C-%D7%90%D7%AA-%D7%9E%D7%99.html">מי פועל על איזו רשת</a></p>
+
+  <section class="leadq" id="lead-form">
+    <div data-lead-quiz data-city="{E(name)}" data-rec="{rec}" data-title="קליטה גרועה ב{E(name)}? קבלו הצעה לחבילה ברשת שקולטת כאן"></div>
   </section>
 
   <h2>כל אתרי השידור ב{E(name)} ({n})</h2>
@@ -273,6 +287,7 @@ def page(c, cities_by_key, all_data, pages, updated, nat, pop_year):
 <script>window.CITY={city_json};</script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
 <script src="city.js?v=2" defer></script>
+<script src="../quiz.js?v=4" defer></script>
 </body>
 </html>
 '''
@@ -299,7 +314,7 @@ def index_page(pages, total_sites, updated):
   <link rel="canonical" href="{url}" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📡</text></svg>">
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="city.css?v=6" />
+  <link rel="stylesheet" href="city.css?v=7" />
 </head>
 <body>
 <header class="top"><a href="../" class="brand">📡 אין קליטה <small>· מפת אנטנות סלולריות</small></a><a href="../" class="back">בדיקה לפי כתובת ←</a></header>
@@ -316,6 +331,7 @@ def index_page(pages, total_sites, updated):
 </main>
 <footer><a href="../stats/">נתונים ודירוגים</a> · <a href="../privacy.html">מדיניות פרטיות</a> · <a href="../terms.html">תנאי שימוש</a> · <a href="../accessibility.html">הצהרת נגישות</a> · <a href="../about.html">אודות</a> · <a href="../contact.html">יצירת קשר</a><br/>אתר פרטי ועצמאי. אינו אתר ממשלתי ואינו פועל מטעם חברות הסלולר.</footer>
 <script src="city.js?v=2" defer></script>
+<script src="../quiz.js?v=4" defer></script>
 </body>
 </html>
 '''

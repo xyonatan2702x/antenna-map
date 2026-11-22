@@ -57,3 +57,6 @@ table.rank td:first-child,table.rank th:first-child{width:38px;color:#667}
 .article ul{padding-right:20px;margin:0 0 14px}.article li{font-size:1rem;color:#333;margin-bottom:8px}
 .article .updated{font-size:.8rem;color:#667;margin:-4px 0 12px}
 .article .tablewrap{margin-bottom:8px}
+.leadq{margin-top:32px;scroll-margin-top:70px}
+.topcta{display:inline-block;margin:2px 0 8px;background:#00B4CC;color:#fff!important;text-decoration:none;font-weight:700;font-size:.92rem;padding:10px 16px;border-radius:11px}
+.topcta:hover{background:#0098ad}
