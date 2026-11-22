@@ -60,3 +60,5 @@ table.rank td:first-child,table.rank th:first-child{width:38px;color:#667}
 .leadq{margin-top:32px;scroll-margin-top:70px}
 .topcta{display:inline-block;margin:2px 0 8px;background:#00B4CC;color:#fff!important;text-decoration:none;font-weight:700;font-size:.92rem;padding:10px 16px;border-radius:11px}
 .topcta:hover{background:#0098ad}
+ul.areas{padding-inline-start:20px;line-height:1.7}ul.areas li{margin-bottom:6px}
+main h3{font-size:1.05rem;margin:18px 0 6px}

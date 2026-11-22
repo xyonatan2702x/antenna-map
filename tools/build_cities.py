@@ -7,6 +7,8 @@ Change BASE_URL when the site moves to its own domain, then run again.
 """
 import json, re, math, html, collections, datetime, os, shutil, sys
 from urllib.parse import quote
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import city_areas
 
 BASE_URL = 'https://einklita.co.il/'
 MIN_SITES = 3            # a city gets a page only with at least this many sites
@@ -131,7 +133,7 @@ def f1(x):
 def plural_sites(n):
     return 'אתר שידור אחד' if n == 1 else f'{n} אתרי שידור'
 
-def page(c, cities_by_key, all_data, pages, updated, nat, pop_year):
+def page(c, cities_by_key, all_data, pages, updated, nat, pop_year, nearest=None):
     name, st, n = c['name'], stats(c), len(c['rows'])
     g5_total = sum(st[k]['g5'] for k in ORDER)
     present = [k for k in ORDER if st[k]['n']]
@@ -200,6 +202,8 @@ def page(c, cities_by_key, all_data, pages, updated, nat, pop_year):
          lead_txt + ' מספר האתרים הוא אינדיקציה בלבד: הקליטה בפועל תלויה גם במרחק מהאתר, בבניין, בקומה ובעומס על הרשת.'),
         (f'יש דור 5 ב{name}?', g5_txt + ' כדי לגלוש בדור 5 צריך גם מכשיר תומך וחבילה שכוללת דור 5.'),
     ]
+    areas_html, areas_faq = city_areas.analyse(c, nearest, ORDER, CO, CO_SHORT) if nearest else ('', [])
+    faq += areas_faq
     if pop_txt:
         faq.append((f'כמה אנטנות יש ב{name} ביחס למספר התושבים?',
                     pop_txt + ' היחס הזה הוא נתון כללי בלבד: אתרי שידור נבדלים זה מזה בעוצמה ובכיסוי, ואתר אחד יכול לשרת גם יישובים סמוכים.'))
@@ -264,6 +268,7 @@ def page(c, cities_by_key, all_data, pages, updated, nat, pop_year):
   <div class="tablewrap"><table class="co cmp"><caption>השוואה ליישובים סמוכים</caption><thead><tr><th>יישוב</th><th>אתרי שידור</th><th>עם דור 5</th><th>ל-10,000 תושבים</th></tr></thead><tbody>{cmp_html}</tbody></table></div>
   <p class="note">מספר התושבים לפי מפקד האוכלוסין {pop_year} של הלמ"ס, ומוצג ליישובים שיש בהם 5,000 תושבים ומעלה. לדירוג הארצי המלא: <a href="../stats/">אנטנות סלולריות בישראל במספרים</a>.</p>
 
+  {areas_html}
   <h2>איזו חברת סלולר הכי טובה ב{E(name)}?</h2>
   <p>{E(rec_txt)}</p>
   <p class="note">{E(rec_txt2)} <a href="../guide/%D7%9E%D7%99-%D7%9E%D7%A4%D7%A2%D7%99%D7%9C-%D7%90%D7%AA-%D7%9E%D7%99.html">מי פועל על איזו רשת</a> · <a href="../guide/%D7%90%D7%99%D7%96%D7%95-%D7%97%D7%91%D7%A8%D7%AA-%D7%A1%D7%9C%D7%95%D7%9C%D7%A8-%D7%94%D7%9B%D7%99-%D7%98%D7%95%D7%91%D7%94.html">איזו חברה הכי טובה בארץ</a> · <a href="../guide/%D7%9E%D7%A2%D7%91%D7%A8-%D7%97%D7%91%D7%A8%D7%AA-%D7%A1%D7%9C%D7%95%D7%9C%D7%A8.html">איך עוברים חברה</a></p>
@@ -361,8 +366,9 @@ def main():
     by_key = {c['key']: c for c in cities}
     pop, pop_total, pop_year = load_population()
     nat = enrich(pages, data, pop, pop_total)
+    near = city_areas.Nearest(data, ORDER)
     for c in pages:
-        open(os.path.join(out, c['slug'] + '.html'), 'w', encoding='utf8').write(page(c, by_key, data, pages, updated, nat, pop_year))
+        open(os.path.join(out, c['slug'] + '.html'), 'w', encoding='utf8').write(page(c, by_key, data, pages, updated, nat, pop_year, near))
     import build_stats
     build_stats.build(sys.modules[__name__], pages, data, nat, pop_year, updated)
     open(os.path.join(out, 'index.html'), 'w', encoding='utf8').write(index_page(pages, len(data), updated))
@@ -371,5 +377,4 @@ def main():
     print(f'{len(pages)} city pages, {covered} of {len(data)} sites covered ({covered * 100 // len(data)}%), data updated {updated}')
 
 if __name__ == '__main__':
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     main()
