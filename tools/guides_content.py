@@ -388,3 +388,7 @@ GUIDES = [
         ],
     },
 ]
+
+# purchase-intent guides first (home page shows the first 6 guides)
+from guides_buy import BUY
+GUIDES = BUY[:3] + GUIDES[:3] + BUY[3:] + GUIDES[3:]

@@ -266,7 +266,7 @@ def page(c, cities_by_key, all_data, pages, updated, nat, pop_year):
 
   <h2>איזו חברת סלולר הכי טובה ב{E(name)}?</h2>
   <p>{E(rec_txt)}</p>
-  <p class="note">{E(rec_txt2)} <a href="../guide/%D7%9E%D7%99-%D7%9E%D7%A4%D7%A2%D7%99%D7%9C-%D7%90%D7%AA-%D7%9E%D7%99.html">מי פועל על איזו רשת</a></p>
+  <p class="note">{E(rec_txt2)} <a href="../guide/%D7%9E%D7%99-%D7%9E%D7%A4%D7%A2%D7%99%D7%9C-%D7%90%D7%AA-%D7%9E%D7%99.html">מי פועל על איזו רשת</a> · <a href="../guide/%D7%90%D7%99%D7%96%D7%95-%D7%97%D7%91%D7%A8%D7%AA-%D7%A1%D7%9C%D7%95%D7%9C%D7%A8-%D7%94%D7%9B%D7%99-%D7%98%D7%95%D7%91%D7%94.html">איזו חברה הכי טובה בארץ</a> · <a href="../guide/%D7%9E%D7%A2%D7%91%D7%A8-%D7%97%D7%91%D7%A8%D7%AA-%D7%A1%D7%9C%D7%95%D7%9C%D7%A8.html">איך עוברים חברה</a></p>
 
   <section class="leadq" id="lead-form">
     <div data-lead-quiz data-city="{E(name)}" data-rec="{rec}" data-title="קליטה גרועה ב{E(name)}? קבלו הצעה לחבילה ברשת שקולטת כאן"></div>
