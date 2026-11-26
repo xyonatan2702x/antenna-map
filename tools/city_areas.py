@@ -7,7 +7,7 @@ Everything is computed from antennas-data.js only."""
 import math, re, collections, html as _h
 import numpy as np
 
-MIN_SITES_AREAS = 25
+MIN_SITES_AREAS = 12
 ZONE_MIN = 4
 
 def _xy(lat, lon, clat):
@@ -29,15 +29,54 @@ def street(addr):
 class Nearest:
     """Distance (km) from a point to the nearest site of a network, using numpy over all sites."""
     def __init__(self, data, order):
-        self.pts = {}
+        self.pts, self.rows = {}, {}
         for k in order:
-            a = np.array([(r[0], r[1]) for r in data if r[2] == k], dtype=float)
-            self.pts[k] = a
-    def dist(self, k, lat, lon):
+            self.rows[k] = [r for r in data if r[2] == k]
+            self.pts[k] = np.array([(r[0], r[1]) for r in self.rows[k]], dtype=float)
+    def _d(self, k, lat, lon):
         a = self.pts[k]
         dy = (a[:, 0] - lat) * 110.57
         dx = (a[:, 1] - lon) * 111.32 * math.cos(math.radians(lat))
-        return float(np.sqrt(dx * dx + dy * dy).min())
+        return np.sqrt(dx * dx + dy * dy)
+    def dist(self, k, lat, lon):
+        return float(self._d(k, lat, lon).min())
+    def nearest(self, k, lat, lon):
+        d = self._d(k, lat, lon); i = int(d.argmin())
+        return float(d[i]), self.rows[k][i]
+
+def fmt_dist(km):
+    if km < 0.1: return 'פחות מ-100 מ\''
+    if km < 1: return f'כ-{int(round(km * 1000 / 50.0) * 50):,} מ\''
+    return f'כ-{km:.1f} ק"מ'
+
+def nearest_section(c, near, order, co, clean_name, key_of=None):
+    """For every locality: distance from its center to the nearest site of each network."""
+    name = c['name']
+    lat, lon = c['center']
+    res = []
+    for k in order:
+        d, r = near.nearest(k, lat, lon)
+        where = _h.escape((r[3].strip() or clean_name(r[4])).replace('`', "'"))
+        town = clean_name(r[4])
+        same = (key_of(r[4]) == c['key']) if key_of else (town == name)
+        place = where if same or not town else f'{where}, {_h.escape(town)}'
+        g = ' '.join(sorted(set(re.findall(r'\d', r[5] or ''))))
+        res.append((d, k, place, g))
+    res.sort()
+    items = ''.join(f'<li><strong>{co[k]}</strong>: {fmt_dist(d)} ({place}{", דור " + g.replace(" ", "/") if g else ""})</li>' for d, k, place, g in res)
+    closest = res[0]
+    gap = res[-1][0] - res[0][0]
+    if gap < 0.15:
+        summ = f'לכל שלוש הרשתות יש אתר שידור במרחק דומה ממרכז {name}.'
+    else:
+        near_ks = [k for d, k, _, _ in res if d - closest[0] < 0.05]
+        if len(near_ks) == 1:
+            summ = f'הרשת עם אתר השידור הקרוב ביותר למרכז {name} היא {co[near_ks[0]]}, והרחוקה היא {co[res[-1][1]]}.'
+        else:
+            summ = f'ל{co[near_ks[0]]} ול{co[near_ks[1]]} יש אתר שידור קרוב למרכז {name} במרחק דומה, ול{co[res[-1][1]]} האתר הקרוב רחוק יותר.'
+    return (f'<h2>כמה רחוק אתר השידור הקרוב ב{name}?</h2>\n'
+            f'  <p>{summ} המרחק מחושב בקו אווירי ממרכז היישוב לאתר הקרוב של כל רשת, גם אם הוא מחוץ ליישוב:</p>\n'
+            f'  <ul class="areas">{items}</ul>\n'), (f'איזו רשת הכי קרובה ל{name}?', re.sub(r'<[^>]+>', '', summ + ' ' + '; '.join(f'{co[k]} {fmt_dist(d)}' for d, k, _, _ in res) + '.'))
 
 ZONE_NAME = {'center': 'במרכז העיר', 'north': 'בצפון העיר', 'south': 'בדרום העיר', 'east': 'במזרח העיר', 'west': 'במערב העיר'}
 ZONE_ORDER = ['center', 'north', 'south', 'east', 'west']

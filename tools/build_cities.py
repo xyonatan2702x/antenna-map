@@ -141,9 +141,9 @@ def page(c, cities_by_key, all_data, pages, updated, nat, pop_year, nearest=None
     top_n = max(st[k]['n'] for k in ORDER)
     leaders = [k for k in ORDER if st[k]['n'] == top_n]
     url = BASE_URL + 'city/' + quote(c['slug']) + '.html'
-    title = f'אנטנות סלולריות ב{name} — קליטה של פרטנר, סלקום ופלאפון'
+    title = f'אנטנות סלולריות ב{name}: איזו חברה קולטת הכי טוב? | אין קליטה'
     counts_txt = ', '.join(f'{CO_SHORT[k]} {st[k]["n"]}' for k in ORDER)
-    desc = f'ב{name} פועלים {plural_sites(n)} סלולריים: {counts_txt}. מפה, רשימת כתובות ודור 5 לפי חברה, מנתוני המשרד להגנת הסביבה.'
+    desc = f'ב{name} פועלים {plural_sites(n)} סלולריים: {counts_txt}. מפת אנטנות, המרחק לאתר הקרוב של כל רשת ואיזו חברה קולטת הכי טוב, מנתונים רשמיים.'
     # summary sentences
     if len(leaders) == 1:
         lead_txt = f'לחברת {CO[leaders[0]]} יש הכי הרבה אתרי שידור ב{name} ({top_n}).'
@@ -160,7 +160,7 @@ def page(c, cities_by_key, all_data, pages, updated, nat, pop_year, nearest=None
     for k in missing:
         best = min((r for r in all_data if r[2] == k), key=lambda r: dist_km(c['center'], r))
         d = dist_km(c['center'], best)
-        miss_html += f'<li>ל{CO[k]} אין אתר שידור בתוך {E(name)}. האתר הקרוב ביותר שלה נמצא ב{E(clean_name(best[4]))} ({E(best[3])}), כ-{d:.1f} ק"מ ממרכז היישוב.</li>'
+        miss_html += f'<li>ל{CO[k]} אין אתר שידור בתוך {E(name)}. האתר הקרוב ביותר שלה נמצא ב{E(clean_name(best[4]))} ({E(best[3])}), {city_areas.fmt_dist(d)} ממרכז היישוב.</li>'
     rows_html = ''.join(
         f'<tr><td>{E(r[3])}</td><td><span class="dot {r[2]}"></span>{CO_SHORT[r[2]]}</td><td>{" · ".join(gens(r[5])) or "לא צוין"}</td></tr>'
         for r in sorted(c['rows'], key=lambda r: (r[3], ORDER.index(r[2]))))
@@ -204,6 +204,8 @@ def page(c, cities_by_key, all_data, pages, updated, nat, pop_year, nearest=None
     ]
     areas_html, areas_faq = city_areas.analyse(c, nearest, ORDER, CO, CO_SHORT) if nearest else ('', [])
     faq += areas_faq
+    near_html, near_faq = city_areas.nearest_section(c, nearest, ORDER, CO, clean_name, key_of) if nearest else ('', None)
+    if near_faq: faq.append(near_faq)
     if pop_txt:
         faq.append((f'כמה אנטנות יש ב{name} ביחס למספר התושבים?',
                     pop_txt + ' היחס הזה הוא נתון כללי בלבד: אתרי שידור נבדלים זה מזה בעוצמה ובכיסוי, ואתר אחד יכול לשרת גם יישובים סמוכים.'))
@@ -268,6 +270,7 @@ def page(c, cities_by_key, all_data, pages, updated, nat, pop_year, nearest=None
   <div class="tablewrap"><table class="co cmp"><caption>השוואה ליישובים סמוכים</caption><thead><tr><th>יישוב</th><th>אתרי שידור</th><th>עם דור 5</th><th>ל-10,000 תושבים</th></tr></thead><tbody>{cmp_html}</tbody></table></div>
   <p class="note">מספר התושבים לפי מפקד האוכלוסין {pop_year} של הלמ"ס, ומוצג ליישובים שיש בהם 5,000 תושבים ומעלה. לדירוג הארצי המלא: <a href="../stats/">אנטנות סלולריות בישראל במספרים</a>.</p>
 
+  {near_html}
   {areas_html}
   <h2>איזו חברת סלולר הכי טובה ב{E(name)}?</h2>
   <p>{E(rec_txt)}</p>
